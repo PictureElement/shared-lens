@@ -112,7 +112,7 @@ function App() {
     <>
       <section className="vkw-hero">
         <div className="vkw-hero__container">
-          <h1 className="vkw-hero__title">Vangelis & Katerina's<br />Wedding Journey</h1>
+          <h1 className="vkw-hero__title">Vangelis & Katerina's<br />Collective Photo Album</h1>
           <div className="vkw-control">
             <label className="vkw-control__label" htmlFor="image">Upload Your Photos:</label>
             <input onChange={handleChange} className="vkw-control__input" id="image" type="file" accept=".png, .jpg, .jpeg" multiple></input>
