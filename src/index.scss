@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500&display=swap');
+
+// Normalize CSS
+@import-normalize;
+
+// Change from `box-sizing: content-box` so that `width` is not affected by `padding` or `border`.
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+a,
+input {
+  &:focus {
+    outline: 2px solid #0d6efd;
+    outline-offset: 1px;
+    transition: outline-offset 0s,outline 0s;
+  }
+}
