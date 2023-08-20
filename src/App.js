@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from './Card';
+import Preview from './Preview';
 import './App.scss';
 import { storage } from './firebase';
 import { ref, uploadBytes, listAll, getDownloadURL, getMetadata } from "firebase/storage";
@@ -14,53 +15,70 @@ function App() {
   const listRef = ref(storage, '/');
 
   React.useEffect(() => {
-    // Find all the prefixes and items.
     listAll(listRef)
       .then((res) => {
         const promises = res.items.map((itemRef) => getMetadata(itemRef));
   
-        // Fetch the metadata for each item
         return Promise.all(promises)
           .then((metadataArr) => {
-            // Sort the items by creation time in descending order
             const sortedItems = res.items.sort((a, b) => {
               const timeA = metadataArr.find(meta => meta.fullPath === a.fullPath).timeCreated;
               const timeB = metadataArr.find(meta => meta.fullPath === b.fullPath).timeCreated;
               return new Date(timeB) - new Date(timeA);
             });
   
-            // Return the sorted items for further processing
             return sortedItems;
           });
       })
       .then((sortedItems) => {
-        // Fetch the download URLs for the sorted items
         const urlPromises = sortedItems.map((itemRef) => getDownloadURL(itemRef));
+        const metadataPromises = sortedItems.map((itemRef) => getMetadata(itemRef));
   
-        return Promise.all(urlPromises);
+        return Promise.all([Promise.all(urlPromises), Promise.all(metadataPromises)]);
       })
-      .then((urls) => {
-        // Set the image URLs in state
-        setimageUrls(urls);
+      .then(([urls, metadataArr]) => {
+        const imageObjects = urls.map((url, index) => ({
+          url,
+          caption: metadataArr[index].customMetadata.caption
+        }));
+        setimageUrls(imageObjects);
       })
       .catch((error) => {
-        // Uh-oh, an error occurred!
+        console.error(error);
       });
-  }, []);  
-
+  }, []);
+  
   const handleChange = (event) => {
-    setImageFiles(Array.from(event.target.files));
-  }
+    const newFiles = Array.from(event.target.files).map((file) => ({
+      file,
+      caption: ''
+    }));
+    setImageFiles((prevFiles) => [...prevFiles, ...newFiles]);
+  };
 
-  const handleClick = (event) => {
+  const handleCaptionChange = (index, caption) => {
+    setImageFiles((prevFiles) => {
+      const updatedFiles = [...prevFiles];
+      updatedFiles[index].caption = caption;
+      return updatedFiles;
+    });
+  };
+  
+  const handleSubmit = (event) => {
     if (imageFiles.length === 0) return;
 
     imageFiles.forEach((imageFile) => {
       // Create a reference to the image
       const imageRef = ref(storage, `${imageFile.name + v4()}`);
 
+      const metadata = {
+        customMetadata: {
+          caption: imageFile.caption
+        }
+      };
+
       // 'file' comes from the Blob or File API
-      uploadBytes(imageRef, imageFile).then((snapshot) => {
+      uploadBytes(imageRef, imageFile.file, metadata).then((snapshot) => {
 
         console.log(`Uploaded ${imageFile.name}!`);
         
@@ -73,13 +91,23 @@ function App() {
     });
   }
 
-  const Cards = imageUrls.map((url, index) => (
+  const Cards = imageUrls.map((image, index) => (
     <Card
-      url={url}
       key={index}
+      url={image.url}
+      caption={image.caption}
     />
   ));
 
+  const imagePreviews = imageFiles.map((item, index) => (
+    <Preview
+      key={index}
+      item={item}
+      index={index}
+      onCaptionChange={handleCaptionChange}
+    />
+  ));
+  
   return (
     <div id="vkw">
       <section className="hero-section">
@@ -89,7 +117,10 @@ function App() {
             <label className="form-control__label" htmlFor="image">Upload Your Photos:</label>
             <input onChange={handleChange} className="form-control__input" id="image" type="file" accept=".png, .jpg, .jpeg" multiple></input>
           </div>
-          <button className="submit" onClick={handleClick}>Submit</button>
+          <div className="hero-section__previews">
+            {imagePreviews}
+          </div>
+          <button className="submit" onClick={handleSubmit}>Submit</button>
         </div>
       </section>
       <section className="gallery-section">
