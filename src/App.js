@@ -109,22 +109,23 @@ function App() {
   ));
   
   return (
-    <div id="vkw">
-      <section className="hero-section">
-        <div className="hero-section__container">
-          <h1 className="hero-section__title">Vangelis & Katerina's<br />Wedding Journey</h1>
-          <div className="form-control">
-            <label className="form-control__label" htmlFor="image">Upload Your Photos:</label>
-            <input onChange={handleChange} className="form-control__input" id="image" type="file" accept=".png, .jpg, .jpeg" multiple></input>
+    <>
+      <section className="vkw-hero">
+        <div className="vkw-hero__container">
+          <h1 className="vkw-hero__title">Vangelis & Katerina's<br />Wedding Journey</h1>
+          <div className="vkw-control">
+            <label className="vkw-control__label" htmlFor="image">Upload Your Photos:</label>
+            <input onChange={handleChange} className="vkw-control__input" id="image" type="file" accept=".png, .jpg, .jpeg" multiple></input>
           </div>
-          <div className="hero-section__previews">
+          <div className="vkw-hero__previews">
             {imagePreviews}
           </div>
-          <button className="submit" onClick={handleSubmit}>Submit</button>
+          <button className="vkw-hero__submit" onClick={handleSubmit}>Submit</button>
         </div>
       </section>
-      <section className="gallery-section">
-        <div className="gallery-section__container">
+
+      <section className="vkw-gallery">
+        <div className="vkw-gallery__container">
           <ResponsiveMasonry columnsCountBreakPoints={{750: 2, 900: 3}}>
             <Masonry gutter="24px">
               {Cards}
@@ -132,8 +133,9 @@ function App() {
           </ResponsiveMasonry>
         </div>
       </section>
-      <div className="copyright">Web app by <a href="https://www.msof.me/" target="_blank">Marios Sofokleous</a></div>
-    </div>
+
+      <div className="vkw-copyright">Web app by <a href="https://www.msof.me/" target="_blank">Marios Sofokleous</a></div>
+    </>
   );
 }
 

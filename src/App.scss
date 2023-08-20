@@ -24,7 +24,8 @@ input {
   }
 }
 
-#vkw .hero-section {
+// Hero section
+.vkw-hero {
   background-color: #0D0000;
   padding: 60px 0;
   &__previews {
@@ -55,9 +56,25 @@ input {
     margin: 0 auto;
     padding: 0 16px;
   }
+  &__submit {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    background-color: #F26D91;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+    color: #0D0000;
+    &:hover {
+      background-color: darken(#F26D91, 5%);
+    }
+  }
 }
 
-#vkw .form-control {
+// Form control
+.vkw-control {
   &__label {
     display: block;
     font-family: 'Poppins', sans-serif;
@@ -82,23 +99,8 @@ input {
   }
 }
 
-#vkw .submit {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  display: block;
-  width: 100%;
-  background-color: #F26D91;
-  padding: 8px;
-  border: none;
-  cursor: pointer;
-  color: #0D0000;
-  &:hover {
-    background-color: darken(#F26D91, 5%);
-  }
-}
-
-#vkw .gallery-section {
+// Gallery section
+.vkw-gallery {
   padding: 60px 0;
   &__container {
     max-width: 1320px;
@@ -107,9 +109,8 @@ input {
   }
 }
 
-
-
-#vkw .copyright {
+// Copyright
+.vkw-copyright {
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
   font-size: 12px;
@@ -123,5 +124,42 @@ input {
     &:hover {
       text-decoration: none;
     }
+  }
+}
+
+// Card
+.vkw-card {
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 8px;
+  }
+  &__caption {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+// Preview
+.vkw-preview {
+  &__image {
+    display: block;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    object-fit: cover;
+    margin-bottom: 16px;
+  }
+  &__input {
+    padding: 4px;
+    display: block;
+    width: 100%;
+    border: 1px solid #dee2e6;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #0D0000;
   }
 }

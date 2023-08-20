@@ -1,11 +1,10 @@
 import React from 'react';
-import './Card.scss';
 
 function Card(props) {
   return (
-    <div className="card">
-      <img className="card__image" alt="..." src={props.url} />
-      <div className="card__caption">{props.caption}</div>
+    <div className="vkw-card">
+      <img className="vkw-card__image" alt="..." src={props.url} />
+      <div className="vkw-card__caption">{props.caption}</div>
     </div>
   )
 }
