@@ -35,6 +35,9 @@ img {
     color: #e8eaed;
     text-align: center;
     margin-bottom: 24px;
+    @media (max-width: 575px) {
+      font-size: 32px;
+    }
   }
   &__container {
     max-width: 800px;
@@ -81,7 +84,7 @@ img {
 #vkw .gallery-section {
   padding: 60px 0;
   &__container {
-    max-width: 800px;
+    max-width: 1320px;
     margin: 0 auto;
     padding: 0 16px;
   }
