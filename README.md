@@ -73,3 +73,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 1. Enable Blaze plan and install image resize plugin
 2. Image Previews: Provide users with a preview of their uploaded images before they are published. This allows them to confirm that the right images are being shared. (https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications#example_showing_thumbnails_of_user-selected_images)
+3. Paginate results
+4. Add a remove button to each preview.

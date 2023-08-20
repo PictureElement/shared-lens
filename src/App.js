@@ -117,9 +117,11 @@ function App() {
             <label className="vkw-control__label" htmlFor="image">Upload Your Photos:</label>
             <input onChange={handleChange} className="vkw-control__input" id="image" type="file" accept=".png, .jpg, .jpeg" multiple></input>
           </div>
-          <div className="vkw-hero__previews">
-            {imagePreviews}
-          </div>
+          {imageFiles.length !== 0 &&
+            <div className="vkw-hero__previews">
+              {imagePreviews}
+            </div>
+          }
           <button className="vkw-hero__submit" onClick={handleSubmit}>Submit</button>
         </div>
       </section>
@@ -127,7 +129,7 @@ function App() {
       <section className="vkw-gallery">
         <div className="vkw-gallery__container">
           <ResponsiveMasonry columnsCountBreakPoints={{750: 2, 900: 3}}>
-            <Masonry gutter="24px">
+            <Masonry gutter="20px">
               {Cards}
             </Masonry>
           </ResponsiveMasonry>
