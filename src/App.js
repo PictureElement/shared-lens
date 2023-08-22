@@ -3,107 +3,125 @@ import Card from './Card';
 import Preview from './Preview';
 import './App.scss';
 import { storage } from './firebase';
-import { ref, uploadBytes, listAll, getDownloadURL, getMetadata } from "firebase/storage";
+import { ref, uploadBytes, list, getDownloadURL, getMetadata } from "firebase/storage";
 import { v4 } from 'uuid';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 function App() {
-  const [imageFiles, setImageFiles] = React.useState([]);
-  const [imageUrls, setimageUrls] = React.useState([]);
 
-  // Create a reference under which you want to list
-  const listRef = ref(storage, '/');
+  // State initialization
+  const [pendingUploads, setPendingUploads] = React.useState([]);
+  const [galleryItems, setGalleryItems] = React.useState([]);
 
+  // useEffect hook to retrieve and set images from Firebase on component mount
   React.useEffect(() => {
-    listAll(listRef)
+    // Create a reference to a specific location in Firebase Storage
+    const listRef = ref(storage, '/');
+
+    list(listRef, { maxResults: 100 })
       .then((res) => {
-        const promises = res.items.map((itemRef) => getMetadata(itemRef));
-  
-        return Promise.all(promises)
-          .then((metadataArr) => {
-            const sortedItems = res.items.sort((a, b) => {
-              const timeA = metadataArr.find(meta => meta.fullPath === a.fullPath).timeCreated;
-              const timeB = metadataArr.find(meta => meta.fullPath === b.fullPath).timeCreated;
-              return new Date(timeB) - new Date(timeA);
-            });
-  
-            return sortedItems;
-          });
-      })
-      .then((sortedItems) => {
-        const urlPromises = sortedItems.map((itemRef) => getDownloadURL(itemRef));
-        const metadataPromises = sortedItems.map((itemRef) => getMetadata(itemRef));
-  
+        const urlPromises = res.items.map((itemRef) => getDownloadURL(itemRef));
+        const metadataPromises = res.items.map((itemRef) => getMetadata(itemRef));
         return Promise.all([Promise.all(urlPromises), Promise.all(metadataPromises)]);
       })
+      // Download URLs and metadata fetched for all images
       .then(([urls, metadataArr]) => {
-        const imageObjects = urls.map((url, index) => ({
+        const galleryObjects = urls.map((url, index) => ({
           url,
           caption: metadataArr[index].customMetadata.caption
         }));
-        setimageUrls(imageObjects);
+        setGalleryItems(galleryObjects);
       })
+      // Handle any fetch errors for URLs or metadata
       .catch((error) => {
         console.error(error);
       });
   }, []);
   
+  // Handle file input changes
   const handleChange = (event) => {
     const newFiles = Array.from(event.target.files).map((file) => ({
+      id: v4(),
       file,
       caption: ''
     }));
-    setImageFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    setPendingUploads((prevFiles) => [...prevFiles, ...newFiles]);
   };
 
-  const handleCaptionChange = (index, caption) => {
-    setImageFiles((prevFiles) => {
-      const updatedFiles = [...prevFiles];
-      updatedFiles[index].caption = caption;
-      return updatedFiles;
+  // Update the caption of a specific pending upload
+  const handleCaptionChange = (itemId, newCaption) => {
+    setPendingUploads((prevItems) => {
+      const updatedItems = prevItems.map((item) => {
+        if (item.id === itemId) {
+          return {...item, caption: newCaption};
+        }
+        return item;
+      });
+      
+      return updatedItems;
     });
   };
   
+  // Submit and upload image files to Firebase Storage
   const handleSubmit = (event) => {
-    if (imageFiles.length === 0) return;
+    if (pendingUploads.length === 0) return;
 
-    imageFiles.forEach((imageFile) => {
-      // Create a reference to the image
-      const imageRef = ref(storage, `${imageFile.name + v4()}`);
+    const uploadPromises = pendingUploads.map((item) => {
+      // Create a reference
+      const itemRef = ref(storage, v4());
 
       const metadata = {
         customMetadata: {
-          caption: imageFile.caption
+          caption: item.caption
         }
       };
-
-      // 'file' comes from the Blob or File API
-      uploadBytes(imageRef, imageFile.file, metadata).then((snapshot) => {
-
-        console.log(`Uploaded ${imageFile.name}!`);
-        
-        // Download uploaded image url and update state
-        getDownloadURL(snapshot.ref)
-          .then((url) => {
-            setimageUrls((prevUrls) => [url, ...prevUrls]);
-          });
-      });
+      
+      return uploadBytes(itemRef, item.file, metadata)
+        .then((snapshot) => {
+          console.log(`Uploaded ${item.file.name}!`);
+          // Return the promise for getting the download URL
+          return getDownloadURL(snapshot.ref);
+        })
+        .then((url) => {
+          return {url: url, caption: item.caption}
+        })
+        .catch((error) => {
+          console.error(error);
+          return null; // Return null or some error indicator for failed uploads
+        });
     });
-  }
 
-  const Cards = imageUrls.map((image, index) => (
+    Promise.all(uploadPromises).then(results => {
+      // Filter out null values (or other error indicators) if any
+      const successfulUploads = results.filter(result => result !== null);
+      // Update state
+      setGalleryItems(prevItems => [...prevItems, ...successfulUploads]);
+      setPendingUploads([]);
+    });
+  };
+
+
+
+
+
+
+
+
+
+
+
+  const Cards = galleryItems.slice().reverse().map((item) => (
     <Card
-      key={index}
-      url={image.url}
-      caption={image.caption}
+      key={item.url}
+      url={item.url}
+      caption={item.caption}
     />
   ));
 
-  const imagePreviews = imageFiles.map((item, index) => (
+  const imagePreviews = pendingUploads.map((item) => (
     <Preview
-      key={index}
+      key={item.id}
       item={item}
-      index={index}
       onCaptionChange={handleCaptionChange}
     />
   ));
@@ -117,7 +135,7 @@ function App() {
             <label className="vkw-control__label" htmlFor="image">Upload Your Photos:</label>
             <input onChange={handleChange} className="vkw-control__input" id="image" type="file" accept=".png, .jpg, .jpeg" multiple></input>
           </div>
-          {imageFiles.length !== 0 &&
+          {pendingUploads.length !== 0 &&
             <div className="vkw-hero__previews">
               {imagePreviews}
             </div>

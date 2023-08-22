@@ -1,10 +1,14 @@
 import React from 'react';
 
-function Preview({ item, index, onCaptionChange }) {
+function Preview({ item, onCaptionChange }) {
 
   const handleChange = (e) => {
     const caption = e.target.value;
-    onCaptionChange(index, caption);
+
+    console.log(item.id);
+    console.log(caption);
+
+    onCaptionChange(item.id, caption);
   }
 
   return (
