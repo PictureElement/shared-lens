@@ -2,17 +2,6 @@
 .vkw-hero {
   background-color: #0D0000;
   padding: 60px 0;
-  &__previews {
-    padding: 16px;
-    border: 2px dashed #e8eaed;
-    margin-bottom: 16px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    @media (max-width: 575px) {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
   &__title {
     font-family: 'Playfair Display', serif;
     font-weight: 400;
@@ -48,8 +37,8 @@
   }
 }
 
-// Form control
-.vkw-control {
+// Dropzone
+.vkw-dropzone {
   &__label {
     display: block;
     font-family: 'Poppins', sans-serif;
@@ -58,19 +47,49 @@
     margin-bottom: 8px;
     color: #e8eaed;
   }
+  &__previews {
+    position: relative;
+    min-height: 96px;
+    padding: 16px;
+    border: 2px dashed #e8eaed;
+    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    @media (max-width: 575px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
   &__input {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     cursor: pointer;
-    appearance: none;
-    border-radius: 0;
-    padding: 8px;
     display: block;
     width: 100%;
-    border: 1px solid #dee2e6;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    margin-bottom: 16px;
-    color: #e8eaed;
+    height: 100%;
+    opacity: 0;
+    &::file-selector-button {
+      cursor: pointer;
+    }
+  }
+  &__icon {
+    position: absolute;
+    top: 50%;
+    inset-inline-start: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    > svg {
+      fill: #e8eaed;
+    }
+    > div {
+      color: #e8eaed;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      font-size: 12px;
+    }
   }
 }
 
@@ -120,6 +139,8 @@
 
 // Preview
 .vkw-preview {
+  position: relative;
+  z-index: 2;
   &__image {
     display: block;
     aspect-ratio: 1 / 1;
@@ -136,5 +157,21 @@
     font-weight: 400;
     font-size: 12px;
     color: #0D0000;
+  }
+  &__delete {
+    position: absolute;
+    top: 3px;
+    inset-inline-end: 3px;
+    border: none;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(0,0,0,0.75);
+    cursor: pointer;
+    svg {
+      width: 32px;
+      height: 32px;
+      fill: #e8eaed;
+    }
   }
 }

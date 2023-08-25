@@ -5,10 +5,10 @@ import './App.scss';
 import { storage } from './firebase';
 import { ref, uploadBytes, list, getDownloadURL, getMetadata } from "firebase/storage";
 import { v4 } from 'uuid';
-import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
+import { ReactComponent as AddPhotoIcon } from './icons/add-photo.svg';
 
 function App() {
-
   // State initialization
   const [pendingUploads, setPendingUploads] = React.useState([]);
   const [galleryItems, setGalleryItems] = React.useState([]);
@@ -58,6 +58,15 @@ function App() {
         return item;
       });
       
+      return updatedItems;
+    });
+  };
+
+  // Remove a pending upload item from the state based on its itemId.
+  const handlePreviewDelete = (itemId) => {
+    // console.log('delete');
+    setPendingUploads((prevItems) => {
+      const updatedItems = prevItems.filter(item => item.id !== itemId);
       return updatedItems;
     });
   };
@@ -123,6 +132,7 @@ function App() {
       key={item.id}
       item={item}
       onCaptionChange={handleCaptionChange}
+      onPreviewDelete={handlePreviewDelete}
     />
   ));
   
@@ -130,16 +140,38 @@ function App() {
     <>
       <section className="vkw-hero">
         <div className="vkw-hero__container">
-          <h1 className="vkw-hero__title">Vangelis & Katerina's<br />Collective Photo Album</h1>
-          <div className="vkw-control">
-            <label className="vkw-control__label" htmlFor="image">Upload Your Photos:</label>
-            <input onChange={handleChange} className="vkw-control__input" id="image" type="file" accept=".png, .jpg, .jpeg" multiple></input>
-          </div>
-          {pendingUploads.length !== 0 &&
-            <div className="vkw-hero__previews">
-              {imagePreviews}
+          {/* <h1 className="vkw-hero__title">Vangelis & Katerina's<br />Collective Photo Album</h1> */}
+          <h1 className="vkw-hero__title">Collective Photo Album</h1>
+          <div className="vkw-dropzone">
+            <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
+                Upload Your Photos:
+                {pendingUploads.length > 0 && ` (${pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen)`}
+            </label>
+            <div className="vkw-dropzone__previews">
+              <input
+                onChange={handleChange}
+                className="vkw-dropzone__input"
+                id="photoUploadInput"
+                type="file"
+                accept=".png, .jpg, .jpeg"
+                multiple
+              />
+              {
+                pendingUploads.length === 0 
+                  ? (
+                      <div className="vkw-dropzone__icon">
+                        <AddPhotoIcon />
+                        <div>Drop up to 4 files.</div>
+                      </div>
+                    ) 
+                  : null
+              }
+              { pendingUploads.length > 0 
+                ? imagePreviews 
+                : null 
+              }
             </div>
-          }
+          </div>
           <button className="vkw-hero__submit" onClick={handleSubmit}>Submit</button>
         </div>
       </section>
