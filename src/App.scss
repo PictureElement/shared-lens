@@ -70,9 +70,12 @@
     display: block;
     width: 100%;
     height: 100%;
-    opacity: 0;
+    color: transparent;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
     &::file-selector-button {
-      cursor: pointer;
+      display: none;
     }
   }
   &__icon {

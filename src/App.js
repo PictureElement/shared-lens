@@ -149,6 +149,7 @@ function App() {
             </label>
             <div className="vkw-dropzone__previews">
               <input
+                title=""
                 onChange={handleChange}
                 className="vkw-dropzone__input"
                 id="photoUploadInput"
