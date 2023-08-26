@@ -71,9 +71,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ### Project To-do List
 
-1. Enable Blaze plan and install image resize plugin
-2. Paginate results
-3. Set maximum number of uplaod items
+1. Paginate results
+2. Set maximum number of upload items (client (done) + backend)
+3. Image resizing (client (done) + backend)
+4. File type check (client + backend)
 
 ### Deploy to firebase
 
