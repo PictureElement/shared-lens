@@ -12,6 +12,7 @@ function App() {
   // State initialization
   const [pendingUploads, setPendingUploads] = React.useState([]);
   const [galleryItems, setGalleryItems] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   // useEffect hook to retrieve and set images from Firebase on component mount
   React.useEffect(() => {
@@ -124,10 +125,12 @@ function App() {
   const handleSubmit = (event) => {
     if (pendingUploads.length === 0) return;
 
-    if (pendingUploads.length > 24) {
+    if (pendingUploads.length > 4) {
       alert('You can only upload a maximum of 4 files at a time.');
       return;
     }
+
+    setLoading(true);
 
     const uploadPromises = pendingUploads.map(async (item) => {
       const resizedBlob = await resizeImage(item.file); // await for resizing to be done
@@ -165,6 +168,7 @@ function App() {
       // Update state
       setGalleryItems(prevItems => [...prevItems, ...successfulUploads]);
       setPendingUploads([]);
+      setLoading(false);
     });
   };
 
@@ -233,7 +237,18 @@ function App() {
               }
             </div>
           </div>
-          <button className="vkw-hero__submit" onClick={handleSubmit}>Submit</button>
+          <button disabled={loading} className="vkw-hero__submit" onClick={handleSubmit}>
+            {loading ? (
+              <>
+                <span className="vkw-hero__submit-spinner" role="status" aria-hidden="true"></span>
+                Loading...
+              </>
+            ) : (
+              <>
+                Submit
+              </>
+            )}
+          </button>
         </div>
       </section>
 

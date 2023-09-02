@@ -32,7 +32,21 @@
     cursor: pointer;
     color: #0D0000;
     &:hover {
-      background-color: darken(#F26D91, 5%);
+      background-color: darken(#F26D91, 10%);
+    }
+    &:disabled {
+      opacity: 0.65;
+    }
+    &-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 0.25em solid currentcolor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      vertical-align: -0.125em;
+      animation: 0.75s linear infinite spinner-border;
+      margin-inline-end: 4px;
     }
   }
 }
@@ -176,5 +190,11 @@
       height: 32px;
       fill: #e8eaed;
     }
+  }
+}
+
+@keyframes spinner-border {
+  100% {
+    transform: rotate(360deg);
   }
 }
