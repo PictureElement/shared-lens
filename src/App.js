@@ -13,30 +13,46 @@ function App() {
   const [pendingUploads, setPendingUploads] = React.useState([]);
   const [galleryItems, setGalleryItems] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [pageToken, setPageToken] = React.useState(undefined); // Keep track of pageToken for pagination
 
-  // useEffect hook to retrieve and set images from Firebase on component mount
-  React.useEffect(() => {
+  const fetchGalleryItems = (nextPageToken) => {
     // Create a reference to a specific location in Firebase Storage
     const listRef = ref(storage, '/');
 
-    list(listRef, { maxResults: 100 })
+    // Additional options to pass to the list API, including pageToken
+    const listOptions = {
+      maxResults: 6,
+      pageToken: nextPageToken
+    };
+
+    list(listRef, listOptions)
       .then((res) => {
         const urlPromises = res.items.map((itemRef) => getDownloadURL(itemRef));
         const metadataPromises = res.items.map((itemRef) => getMetadata(itemRef));
-        return Promise.all([Promise.all(urlPromises), Promise.all(metadataPromises)]);
+        return Promise.all([Promise.all(urlPromises), Promise.all(metadataPromises), res.nextPageToken]);
       })
       // Download URLs and metadata fetched for all images
-      .then(([urls, metadataArr]) => {
+      .then(([urls, metadataArr, nextPageToken]) => {
         const galleryObjects = urls.map((url, index) => ({
           url,
           caption: metadataArr[index].customMetadata.caption
         }));
-        setGalleryItems(galleryObjects);
+        setGalleryItems(prev => [...prev, ...galleryObjects]);
+
+        // Save nextPageToken for future pagination
+        console.log(nextPageToken);
+        setPageToken(nextPageToken);
       })
       // Handle any fetch errors for URLs or metadata
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  React.useEffect(() => {
+    console.log(fetch);
+    // Initial fetch without pageToken (first page)
+    fetchGalleryItems(null);
   }, []);
   
   // Handle file input changes
@@ -120,6 +136,11 @@ function App() {
       }
     });
   };
+
+  // Button click handler to load next set of items (next page)
+  const loadMoreItems = () => {
+    fetchGalleryItems(pageToken);
+  };
   
   // Submit and upload image files to Firebase Storage
   const handleSubmit = (event) => {
@@ -171,16 +192,6 @@ function App() {
       setLoading(false);
     });
   };
-
-
-
-
-
-
-
-
-
-
 
   const Cards = galleryItems.slice().reverse().map((item) => (
     <Card
@@ -260,6 +271,7 @@ function App() {
             </Masonry>
           </ResponsiveMasonry>
         </div>
+        {pageToken !== undefined && <button onClick={loadMoreItems}>Load More</button>}
       </section>
 
       <div className="vkw-copyright">Web app by <a href="https://www.msof.me/" target="_blank">Marios Sofokleous</a></div>
