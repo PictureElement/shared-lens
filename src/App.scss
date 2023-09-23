@@ -1,19 +1,36 @@
 // Hero section
 .vkw-hero {
   background-color: #0D0000;
-  padding: 60px 0;
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
   &__title {
+    position: relative;
+    z-index: 1;
     font-family: 'Playfair Display', serif;
-    font-weight: 400;
+    font-weight: 700;
     font-size: 40px;
+    line-height: 1.2;
+    color: #e8eaed;
+    color: #F26D91;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 16px;
+    @media (max-width: 575px) {
+      font-size: 28px;
+    }
+  }
+  &__subtitle {
+    position: relative;
+    z-index: 1;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
     line-height: 1.2;
     color: #e8eaed;
     text-align: center;
     margin-top: 0;
     margin-bottom: 24px;
-    @media (max-width: 575px) {
-      font-size: 28px;
-    }
   }
   &__container {
     max-width: 800px;
@@ -21,6 +38,8 @@
     padding: 0 16px;
   }
   &__submit {
+    position: relative;
+    z-index: 1;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     font-size: 16px;
@@ -53,6 +72,8 @@
 
 // Dropzone
 .vkw-dropzone {
+  position: relative;
+  z-index: 1;
   &__label {
     display: block;
     font-family: 'Poppins', sans-serif;
@@ -110,6 +131,15 @@
   }
 }
 
+.vkw-flower {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
 // Gallery section
 .vkw-gallery {
   padding: 60px 0;
@@ -144,13 +174,43 @@
     display: block;
     width: 100%;
     height: auto;
-    margin-bottom: 8px;
   }
   &__caption {
+    margin-top: 8px;
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
     font-size: 12px;
     line-height: 1.5;
+  }
+}
+
+.vkw-load-more {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  display: block;
+  background-color: #F26D91;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  color: #0D0000;
+  margin: 20px auto 0 auto;
+  &:hover {
+    background-color: darken(#F26D91, 10%);
+  }
+  &:disabled {
+    opacity: 0.65;
+  }
+  &__spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 0.25em solid currentcolor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    vertical-align: -0.125em;
+    animation: 0.75s linear infinite spinner-border;
+    margin-inline-end: 4px;
   }
 }
 

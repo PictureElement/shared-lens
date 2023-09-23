@@ -7,6 +7,7 @@ import { ref, uploadBytes, list, getDownloadURL, getMetadata } from "firebase/st
 import { v4 } from 'uuid';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import { ReactComponent as AddPhotoIcon } from './icons/add-photo.svg';
+import Flower from './Flower';
 
 function App() {
   // State initialization
@@ -16,6 +17,8 @@ function App() {
   const [pageToken, setPageToken] = React.useState(undefined); // Keep track of pageToken for pagination
 
   const fetchGalleryItems = (nextPageToken) => {
+    setLoading(true);
+
     // Create a reference to a specific location in Firebase Storage
     const listRef = ref(storage, '/');
 
@@ -42,10 +45,12 @@ function App() {
         // Save nextPageToken for future pagination
         console.log(nextPageToken);
         setPageToken(nextPageToken);
+        setLoading(false);
       })
       // Handle any fetch errors for URLs or metadata
       .catch((error) => {
         console.error(error);
+        setLoading(false);
       });
   };
 
@@ -214,8 +219,8 @@ function App() {
     <>
       <section className="vkw-hero">
         <div className="vkw-hero__container">
-          {/* <h1 className="vkw-hero__title">Vangelis & Katerina's<br />Collective Photo Album</h1> */}
-          <h1 className="vkw-hero__title">Collective Photo Album</h1>
+          <h1 className="vkw-hero__title">Evangelos & Katerina's<br />Wedding Memories</h1>
+          <div className="vkw-hero__subtitle">Capturing Love, Laughter, and Cherished Moments</div>
           <div className="vkw-dropzone">
             <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
                 Upload Your Photos:
@@ -261,17 +266,30 @@ function App() {
             )}
           </button>
         </div>
+        <Flower />
       </section>
 
       <section className="vkw-gallery">
         <div className="vkw-gallery__container">
-          <ResponsiveMasonry columnsCountBreakPoints={{750: 2, 900: 3}}>
+          <ResponsiveMasonry columnsCountBreakPoints={{320: 2, 767: 3, 1024: 4}}>
             <Masonry gutter="20px">
               {Cards}
             </Masonry>
           </ResponsiveMasonry>
         </div>
-        {pageToken !== undefined && <button onClick={loadMoreItems}>Load More</button>}
+        {pageToken !== undefined && 
+          <button disabled={loading} className="vkw-load-more" onClick={loadMoreItems}>
+            {loading ? (
+              <>
+                <span className="vkw-load-more__spinner" role="status" aria-hidden="true"></span>
+                Loading...
+              </>
+            ) : (
+              <>
+                Discover More
+              </>
+            )}
+          </button>}
       </section>
 
       <div className="vkw-copyright">Web app by <a href="https://www.msof.me/" target="_blank">Marios Sofokleous</a></div>
