@@ -220,38 +220,42 @@ function App() {
       <section className="vkw-hero">
         <div className="vkw-hero__container">
           <h1 className="vkw-hero__title">Evangelos & Katerina's<br />Wedding Memories</h1>
-          <div className="vkw-hero__subtitle">Capturing Love, Laughter, and Cherished Moments</div>
-          <div className="vkw-dropzone">
-            <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
-                Upload Your Photos:
-                {pendingUploads.length > 0 && ` (${pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen)`}
-            </label>
-            <div className="vkw-dropzone__previews">
-              <input
-                title=""
-                onChange={handleChange}
-                className="vkw-dropzone__input"
-                id="photoUploadInput"
-                type="file"
-                accept=".png, .jpg, .jpeg"
-                multiple
-                max="3"
-              />
-              {
-                pendingUploads.length === 0 
-                  ? (
-                      <div className="vkw-dropzone__icon">
-                        <AddPhotoIcon />
-                        <div>Drop up to 4 files.</div>
-                      </div>
-                    ) 
-                  : null
-              }
-              { pendingUploads.length > 0 
-                ? imagePreviews 
-                : null 
-              }
-            </div>
+          <div className="vkw-hero__subtitle">Capturing Love, Laughter,<br />and Cherished Moments</div>
+        </div>
+        <Flower />
+      </section>
+
+      <section className="vkw-dropzone">
+        <div className="vkw-dropzone__container">
+          <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
+            Upload Your Photos:
+            {pendingUploads.length > 0 && ` (${pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen)`}
+          </label>
+          <div className="vkw-dropzone__previews">
+            <input
+              title=""
+              onChange={handleChange}
+              className="vkw-dropzone__input"
+              id="photoUploadInput"
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              multiple
+              max="3"
+            />
+            {
+              pendingUploads.length === 0 
+                ? (
+                    <div className="vkw-dropzone__icon">
+                      <AddPhotoIcon />
+                      <div>Drop up to 4 files.</div>
+                    </div>
+                  ) 
+                : null
+            }
+            { pendingUploads.length > 0 
+              ? imagePreviews 
+              : null 
+            }
           </div>
           <button disabled={loading} className="vkw-hero__submit" onClick={handleSubmit}>
             {loading ? (
@@ -266,7 +270,6 @@ function App() {
             )}
           </button>
         </div>
-        <Flower />
       </section>
 
       <section className="vkw-gallery">

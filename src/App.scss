@@ -1,7 +1,7 @@
 // Hero section
 .vkw-hero {
   background-color: #0D0000;
-  padding: 80px 0;
+  padding: 80px 0 80px 0; 
   position: relative;
   overflow: hidden;
   &__title {
@@ -14,10 +14,10 @@
     color: #e8eaed;
     color: #F26D91;
     text-align: center;
-    margin-top: 0;
-    margin-bottom: 16px;
+    margin: 0 auto 12px auto;
     @media (max-width: 575px) {
-      font-size: 28px;
+      font-size: 24px;
+      margin-bottom: 4px;
     }
   }
   &__subtitle {
@@ -26,11 +26,13 @@
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     font-size: 20px;
-    line-height: 1.2;
+    line-height: 1.5;
     color: #e8eaed;
     text-align: center;
-    margin-top: 0;
-    margin-bottom: 24px;
+    margin: 0 auto;
+    @media (max-width: 575px) {
+      font-size: 16px;
+    }
   }
   &__container {
     max-width: 800px;
@@ -74,6 +76,13 @@
 .vkw-dropzone {
   position: relative;
   z-index: 1;
+  background-color: #686060;
+  padding: 60px 0;
+  &__container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
   &__label {
     display: block;
     font-family: 'Poppins', sans-serif;
@@ -132,12 +141,19 @@
 }
 
 .vkw-flower {
-  width: 100%;
   position: absolute;
-  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   z-index: 0;
+  width: 100%;
+  bottom: -200px;
+  @media (max-width: 1024px) {
+    width: 150%;
+  }
+  @media (max-width: 767px) {
+    width: 140%;
+    bottom: -100px;
+  }
 }
 
 // Gallery section
