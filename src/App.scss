@@ -100,7 +100,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
-    @media (max-width: 575px) {
+    @media (max-width: 767px) {
       grid-template-columns: repeat(2, 1fr);
     }
   }
@@ -210,7 +210,7 @@
   border: none;
   cursor: pointer;
   color: #0D0000;
-  margin: 20px auto 0 auto;
+  margin: 60px auto 0 auto;
   &:hover {
     background-color: darken(#F26D91, 10%);
   }

@@ -24,7 +24,7 @@ function App() {
 
     // Additional options to pass to the list API, including pageToken
     const listOptions = {
-      maxResults: 6,
+      maxResults: 1000,
       pageToken: nextPageToken
     };
 
@@ -38,9 +38,15 @@ function App() {
       .then(([urls, metadataArr, nextPageToken]) => {
         const galleryObjects = urls.map((url, index) => ({
           url,
-          caption: metadataArr[index].customMetadata.caption
+          caption: metadataArr[index].customMetadata.caption,
+          timeCreated: metadataArr[index].timeCreated
         }));
-        setGalleryItems(prev => [...prev, ...galleryObjects]);
+
+        // Sort the gallery objects by timeCreated in reverse order
+        // const sortedGalleryItems = galleryObjects.sort((a, b) => new Date(b.timeCreated) - new Date(a.timeCreated));
+        const sortedGalleryItems = galleryObjects.sort((a, b) => new Date(a.timeCreated) - new Date(b.timeCreated));
+
+        setGalleryItems((prev) => [...prev, ...sortedGalleryItems]);
 
         // Save nextPageToken for future pagination
         console.log(nextPageToken);
@@ -179,8 +185,15 @@ function App() {
           // Return the promise for getting the download URL
           return getDownloadURL(snapshot.ref);
         })
-        .then((url) => {
-          return {url: url, caption: item.caption}
+        .then(async (url) => {
+          const metadata = await getMetadata(ref(storage, url));  // Fetch metadata for the URL
+          const timeCreated = metadata.timeCreated;  // Extract timeCreated from metadata
+        
+          return {
+            url: url,
+            caption: item.caption,
+            timeCreated: timeCreated  // Include timeCreated in the returned object
+          };
         })
         .catch((error) => {
           console.error(error);
@@ -219,7 +232,7 @@ function App() {
     <>
       <section className="vkw-hero">
         <div className="vkw-hero__container">
-          <h1 className="vkw-hero__title">Evangelos & Katerina's<br />Wedding Memories</h1>
+          <h1 className="vkw-hero__title">Evangelos & Katerina's<br />Collective Photo Album</h1>
           <div className="vkw-hero__subtitle">Capturing Love, Laughter,<br />and Cherished Moments</div>
         </div>
         <Flower />
