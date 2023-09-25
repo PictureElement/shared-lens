@@ -3,7 +3,7 @@ import Card from './Card';
 import Preview from './Preview';
 import './App.scss';
 import { storage } from './firebase';
-import { ref, uploadBytes, list, getDownloadURL, getMetadata } from "firebase/storage";
+import { ref, uploadBytes, listAll, getDownloadURL, getMetadata } from "firebase/storage";
 import { v4 } from 'uuid';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import { ReactComponent as AddPhotoIcon } from './icons/add-photo.svg';
@@ -14,28 +14,21 @@ function App() {
   const [pendingUploads, setPendingUploads] = React.useState([]);
   const [galleryItems, setGalleryItems] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [pageToken, setPageToken] = React.useState(undefined); // Keep track of pageToken for pagination
 
-  const fetchGalleryItems = (nextPageToken) => {
+  const fetchGalleryItems = () => {
     setLoading(true);
 
     // Create a reference to a specific location in Firebase Storage
     const listRef = ref(storage, '/');
 
-    // Additional options to pass to the list API, including pageToken
-    const listOptions = {
-      maxResults: 1000,
-      pageToken: nextPageToken
-    };
-
-    list(listRef, listOptions)
+    listAll(listRef)
       .then((res) => {
         const urlPromises = res.items.map((itemRef) => getDownloadURL(itemRef));
         const metadataPromises = res.items.map((itemRef) => getMetadata(itemRef));
-        return Promise.all([Promise.all(urlPromises), Promise.all(metadataPromises), res.nextPageToken]);
+        return Promise.all([Promise.all(urlPromises), Promise.all(metadataPromises)]);
       })
       // Download URLs and metadata fetched for all images
-      .then(([urls, metadataArr, nextPageToken]) => {
+      .then(([urls, metadataArr]) => {
         const galleryObjects = urls.map((url, index) => ({
           url,
           caption: metadataArr[index].customMetadata.caption,
@@ -48,9 +41,6 @@ function App() {
 
         setGalleryItems((prev) => [...prev, ...sortedGalleryItems]);
 
-        // Save nextPageToken for future pagination
-        console.log(nextPageToken);
-        setPageToken(nextPageToken);
         setLoading(false);
       })
       // Handle any fetch errors for URLs or metadata
@@ -62,8 +52,8 @@ function App() {
 
   React.useEffect(() => {
     console.log(fetch);
-    // Initial fetch without pageToken (first page)
-    fetchGalleryItems(null);
+    // Initial fetch
+    fetchGalleryItems();
   }, []);
   
   // Handle file input changes
@@ -147,12 +137,7 @@ function App() {
       }
     });
   };
-
-  // Button click handler to load next set of items (next page)
-  const loadMoreItems = () => {
-    fetchGalleryItems(pageToken);
-  };
-  
+ 
   // Submit and upload image files to Firebase Storage
   const handleSubmit = (event) => {
     if (pendingUploads.length === 0) return;
@@ -204,10 +189,14 @@ function App() {
     Promise.all(uploadPromises).then(results => {
       // Filter out null values (or other error indicators) if any
       const successfulUploads = results.filter(result => result !== null);
+      
       // Update state
-      setGalleryItems(prevItems => [...prevItems, ...successfulUploads]);
+      setGalleryItems([]);
       setPendingUploads([]);
       setLoading(false);
+
+      // Fetch gallery items again
+      fetchGalleryItems();
     });
   };
 
@@ -293,22 +282,9 @@ function App() {
             </Masonry>
           </ResponsiveMasonry>
         </div>
-        {pageToken !== undefined && 
-          <button disabled={loading} className="vkw-load-more" onClick={loadMoreItems}>
-            {loading ? (
-              <>
-                <span className="vkw-load-more__spinner" role="status" aria-hidden="true"></span>
-                Loading...
-              </>
-            ) : (
-              <>
-                Discover More
-              </>
-            )}
-          </button>}
       </section>
 
-      <div className="vkw-copyright">Web app by <a href="https://www.msof.me/" target="_blank">Marios Sofokleous</a></div>
+      <div className="vkw-copyright">Web app by <a href="https://www.msof.me/" rel="noreferrer" target="_blank">Marios Sofokleous</a></div>
     </>
   );
 }
