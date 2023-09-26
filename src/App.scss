@@ -11,7 +11,6 @@
     font-weight: 700;
     font-size: 40px;
     line-height: 1.2;
-    color: #e8eaed;
     color: #F26D91;
     text-align: center;
     margin: 0 auto 12px auto;
@@ -57,6 +56,8 @@
     }
     &:disabled {
       opacity: 0.65;
+      cursor: not-allowed;
+      background-color: #F26D91;
     }
     &-spinner {
       display: inline-block;
@@ -72,12 +73,30 @@
   }
 }
 
+// Flower
+.vkw-flower {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  width: 100%;
+  bottom: -200px;
+  @media (max-width: 1024px) {
+    width: 150%;
+  }
+  @media (max-width: 767px) {
+    width: 140%;
+    bottom: -100px;
+  }
+}
+
 // Dropzone
 .vkw-dropzone {
   position: relative;
   z-index: 1;
   background-color: #686060;
   padding: 60px 0;
+  margin-bottom: 60px;
   &__container {
     max-width: 800px;
     margin: 0 auto;
@@ -118,6 +137,10 @@
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
+    &:disabled {
+      cursor: not-allowed;
+      background-color: rgba(255, 255, 255, 0);
+    }
     &::file-selector-button {
       display: none;
     }
@@ -137,96 +160,6 @@
       font-weight: 400;
       font-size: 12px;
     }
-  }
-}
-
-.vkw-flower {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 0;
-  width: 100%;
-  bottom: -200px;
-  @media (max-width: 1024px) {
-    width: 150%;
-  }
-  @media (max-width: 767px) {
-    width: 140%;
-    bottom: -100px;
-  }
-}
-
-// Gallery section
-.vkw-gallery {
-  padding: 60px 0;
-  &__container {
-    max-width: 1320px;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
-}
-
-// Copyright
-.vkw-copyright {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 1.5;
-  text-align: center;
-  margin-bottom: 16px;
-  color: #0D0000;
-  a {
-    text-decoration: underline;
-    color: #0D0000;
-    &:hover {
-      text-decoration: none;
-    }
-  }
-}
-
-// Card
-.vkw-card {
-  &__image {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-  &__caption {
-    margin-top: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 300;
-    font-size: 12px;
-    line-height: 1.5;
-  }
-}
-
-.vkw-load-more {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  display: block;
-  background-color: #F26D91;
-  padding: 8px;
-  border: none;
-  cursor: pointer;
-  color: #0D0000;
-  margin: 60px auto 0 auto;
-  &:hover {
-    background-color: darken(#F26D91, 10%);
-  }
-  &:disabled {
-    opacity: 0.65;
-  }
-  &__spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 0.25em solid currentcolor;
-    border-right-color: transparent;
-    border-radius: 50%;
-    vertical-align: -0.125em;
-    animation: 0.75s linear infinite spinner-border;
-    margin-inline-end: 4px;
   }
 }
 
@@ -266,6 +199,151 @@
       height: 32px;
       fill: #e8eaed;
     }
+  }
+}
+
+// Pagination
+.vkw-pagination {
+  &__container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__numbers {
+    display: flex;
+    align-items: center;
+    button {
+      @media (max-width: 767px) {
+        height: 28px;
+        width: 28px;
+      }
+      @media (max-width: 400px) {
+        display: none;
+      }
+    }
+  }
+  &__fraction {
+    display: none;
+    color: #0D0000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    @media (max-width: 400px) {
+      display: inline-block;
+    }
+  }
+  &__control {
+    background-color: white;
+    border: none;
+    border-radius: 0;
+    color: #0D0000;
+    margin: 0 4px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    height: 44px;
+    width: 44px;
+    cursor: pointer;
+    &:hover {
+      background-color: darken(white, 5%);
+    }
+    &_ellipsis {
+      color: #0D0000;
+      cursor: default;
+      &:hover {
+        background-color: transparent;
+      }
+    }
+    &_active {
+      color: #F26D91;
+    }
+  }
+  &__arrow {
+    border: 1px solid #0D0000;
+    fill: #0D0000;
+    margin: 0;
+    transition: opacity 200ms ease-out;
+    &:disabled {
+      opacity: 0;
+    }
+    &_prev {
+      margin-inline-end: 4px;
+    }
+    &_next {
+      margin-inline-start: 4px;
+    }
+  }
+}
+
+// Gallery
+.vkw-gallery {
+  padding: 32px 0;
+  &__container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+}
+
+// Card
+.vkw-card {
+  &__image {
+    display: none;
+    width: 100%;
+    height: auto;
+    &.loaded {
+      display: block;
+    }
+  }
+  &__caption {
+    margin-top: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+// Copyright
+.vkw-copyright {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 16px;
+  margin-top: 60px;
+  color: #0D0000;
+  a {
+    text-decoration: underline;
+    color: #0D0000;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.vkw-back-to-top-button {
+  display: none;
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background-color: #F26D91;
+  fill: #0D0000;
+  border: none;
+  padding: 0;
+  height: 44px;
+  width: 44px;
+  cursor: pointer;
+  &:hover {
+    background-color: darken(#F26D91, 10%);
+  }
+  &.visible {
+    display: block;
   }
 }
 
