@@ -293,9 +293,12 @@
 // Card
 .vkw-card {
   &__image {
-    display: block;
+    display: none;
     width: 100%;
     height: auto;
+    &.loaded {
+      display: block;
+    }
   }
   &__caption {
     margin-top: 8px;

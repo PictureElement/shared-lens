@@ -9,10 +9,11 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import { ReactComponent as AddPhotoIcon } from './icons/add-photo.svg';
 import Flower from './Flower';
 import Pagination from './Pagination';
-import CardSkeleton from './CardSkeleton';
 
-const itemsPerPage = 4; // Set the number of items to display per page
-const numOfSkeletons = 12;
+// const itemsPerPage = 4; // Set the number of items to display per page
+const itemsPerPage = 12; // Set the number of items to display per page
+// const itemsPerPage = 60; // Set the number of items to display per page
+// const numOfSkeletons = 60;
 
 function App() {
   // State initialization
@@ -21,7 +22,7 @@ function App() {
   const [pendingUploads, setPendingUploads] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [numOfItems, setNumOfItems] = React.useState();
+  const [numOfItems, setNumOfItems] = React.useState(0);
   const [effectKey, setEffectKey] = React.useState(0);
   
   // Fetches gallery items from Firebase Storage and sets up pagination
@@ -85,9 +86,7 @@ function App() {
     // Set the updated paginated items
     setPaginatedGalleryItems(newPaginatedGalleryItems);
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    setLoading(false);
   }
     
   // Handle file input changes
@@ -214,6 +213,8 @@ function App() {
       setPaginatedGalleryItems([]);
       setPendingUploads([]);
       setLoading(false);
+      setCurrentPage(1);
+      setNumOfItems(0);
       setEffectKey(prev => prev + 1);
     });
   };
@@ -225,10 +226,6 @@ function App() {
       caption={item.caption}
       loading={loading}
     />
-  ));
-
-  const CardSkeletons = Array(numOfSkeletons).fill(0).map(item => (
-    <CardSkeleton key={v4()} />
   ));
 
   const imagePreviews = pendingUploads.map((item) => (
@@ -303,19 +300,7 @@ function App() {
         numOfItems={numOfItems}
         onPageChange={handlePageChange}
       />
-
-      {loading &&
-        <section className="vkw-gallery">
-          <div className="vkw-gallery__container">
-            <ResponsiveMasonry columnsCountBreakPoints={{320: 2, 767: 3, 1024: 4}}>
-              <Masonry gutter="20px">
-                {CardSkeletons}
-              </Masonry>
-            </ResponsiveMasonry>
-          </div>
-        </section>
-      }
-
+      
       <section className="vkw-gallery">
         <div className="vkw-gallery__container">
           <ResponsiveMasonry columnsCountBreakPoints={{320: 2, 767: 3, 1024: 4}}>
@@ -325,13 +310,6 @@ function App() {
           </ResponsiveMasonry>
         </div>
       </section>
-
-      <Pagination
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        numOfItems={numOfItems}
-        onPageChange={handlePageChange}
-      />
 
       <div className="vkw-copyright">Web app by <a href="https://www.msof.me/" rel="noreferrer" target="_blank">Marios Sofokleous</a></div>
     </>
