@@ -9,7 +9,8 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import { ReactComponent as AddPhotoIcon } from './icons/add-photo.svg';
 import Flower from './Flower';
 import Pagination from './Pagination';
-import { ThreeDots } from  'react-loader-spinner'
+import { ThreeDots } from  'react-loader-spinner';
+import BackToTopButton from './BackToTopButton';
 
 // const itemsPerPage = 4; // Set the number of items to display per page
 const itemsPerPage = 12; // Set the number of items to display per page
@@ -326,6 +327,8 @@ function App() {
       </section>
 
       <div className="vkw-copyright">Web app by <a href="https://www.msof.me/" rel="noreferrer" target="_blank">Marios Sofokleous</a></div>
+
+      <BackToTopButton />
     </>
   );
 }

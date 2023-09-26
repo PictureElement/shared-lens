@@ -11,7 +11,6 @@
     font-weight: 700;
     font-size: 40px;
     line-height: 1.2;
-    color: #e8eaed;
     color: #F26D91;
     text-align: center;
     margin: 0 auto 12px auto;
@@ -325,6 +324,26 @@
     &:hover {
       text-decoration: none;
     }
+  }
+}
+
+.vkw-back-to-top-button {
+  display: none;
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background-color: #F26D91;
+  fill: #0D0000;
+  border: none;
+  padding: 0;
+  height: 44px;
+  width: 44px;
+  cursor: pointer;
+  &:hover {
+    background-color: darken(#F26D91, 10%);
+  }
+  &.visible {
+    display: block;
   }
 }
 
