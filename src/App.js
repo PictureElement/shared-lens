@@ -9,6 +9,7 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import { ReactComponent as AddPhotoIcon } from './icons/add-photo.svg';
 import Flower from './Flower';
 import Pagination from './Pagination';
+import { ThreeDots } from  'react-loader-spinner'
 
 // const itemsPerPage = 4; // Set the number of items to display per page
 const itemsPerPage = 12; // Set the number of items to display per page
@@ -294,20 +295,33 @@ function App() {
         </div>
       </section>
 
-      <Pagination
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        numOfItems={numOfItems}
-        onPageChange={handlePageChange}
-      />
+      {loading ? null : (
+        <Pagination
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          numOfItems={numOfItems}
+          onPageChange={handlePageChange}
+        />
+      )}
       
       <section className="vkw-gallery">
         <div className="vkw-gallery__container">
-          <ResponsiveMasonry columnsCountBreakPoints={{320: 2, 767: 3, 1024: 4}}>
-            <Masonry gutter="20px">
-              {Cards}
-            </Masonry>
-          </ResponsiveMasonry>
+          <ThreeDots 
+            height="80" 
+            width="80" 
+            radius="9"
+            color="#F26D91" 
+            ariaLabel="loading images"
+            wrapperStyle={{justifyContent: 'center'}}
+            visible={loading}
+          />
+          {loading ? null : (
+            <ResponsiveMasonry columnsCountBreakPoints={{ 320: 2, 767: 3, 1024: 4 }}>
+              <Masonry gutter="20px">
+                {Cards}
+              </Masonry>
+            </ResponsiveMasonry>
+          )}
         </div>
       </section>
 
