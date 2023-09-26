@@ -8,13 +8,23 @@ import { v4 } from 'uuid';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import { ReactComponent as AddPhotoIcon } from './icons/add-photo.svg';
 import Flower from './Flower';
+import Pagination from './Pagination';
+import CardSkeleton from './CardSkeleton';
+
+const itemsPerPage = 4; // Set the number of items to display per page
+const numOfSkeletons = 12;
 
 function App() {
   // State initialization
+  const [allGalleryItems, setAllGalleryItems] = React.useState([]);
+  const [paginatedGalleryItems, setPaginatedGalleryItems] = React.useState([]);
   const [pendingUploads, setPendingUploads] = React.useState([]);
-  const [galleryItems, setGalleryItems] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [numOfItems, setNumOfItems] = React.useState();
+  const [effectKey, setEffectKey] = React.useState(0);
+  
+  // Fetches gallery items from Firebase Storage and sets up pagination
   const fetchGalleryItems = () => {
     setLoading(true);
 
@@ -23,23 +33,28 @@ function App() {
 
     listAll(listRef)
       .then((res) => {
+        setNumOfItems(res.items.length);
+        // Fetch download URLs and metadata for all images
         const urlPromises = res.items.map((itemRef) => getDownloadURL(itemRef));
         const metadataPromises = res.items.map((itemRef) => getMetadata(itemRef));
         return Promise.all([Promise.all(urlPromises), Promise.all(metadataPromises)]);
       })
-      // Download URLs and metadata fetched for all images
       .then(([urls, metadataArr]) => {
-        const galleryObjects = urls.map((url, index) => ({
+        // Process the fetched data and set the state
+        let allGalleryObjects = urls.map((url, index) => ({
           url,
           caption: metadataArr[index].customMetadata.caption,
           timeCreated: metadataArr[index].timeCreated
         }));
 
-        // Sort the gallery objects by timeCreated in reverse order
-        // const sortedGalleryItems = galleryObjects.sort((a, b) => new Date(b.timeCreated) - new Date(a.timeCreated));
-        const sortedGalleryItems = galleryObjects.sort((a, b) => new Date(a.timeCreated) - new Date(b.timeCreated));
+        // Sort all items in reverse chronological order
+        allGalleryObjects = allGalleryObjects.sort((a, b) => new Date(b.timeCreated) - new Date(a.timeCreated));
 
-        setGalleryItems((prev) => [...prev, ...sortedGalleryItems]);
+        // Paginate the fetched items to display a specific number of items per page
+        const paginatedGalleryObjects = allGalleryObjects.slice(0, itemsPerPage);
+
+        setAllGalleryItems([...allGalleryObjects]);
+        setPaginatedGalleryItems([...paginatedGalleryObjects]);
 
         setLoading(false);
       })
@@ -50,12 +65,31 @@ function App() {
       });
   };
 
+  // Fetches gallery items on component mount or whenever effectKey changes
   React.useEffect(() => {
-    console.log(fetch);
-    // Initial fetch
     fetchGalleryItems();
-  }, []);
-  
+  }, [effectKey]);
+
+  // Handles a change in the selected page for pagination
+  const handlePageChange = (page) => {
+    setLoading(true);
+    setCurrentPage(page);
+
+    // Start and end index
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    // Update the paginated items based on the new range
+    const newPaginatedGalleryItems = allGalleryItems.slice(startIndex, endIndex);
+
+    // Set the updated paginated items
+    setPaginatedGalleryItems(newPaginatedGalleryItems);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }
+    
   // Handle file input changes
   const handleChange = (event) => {
     const newFiles = Array.from(event.target.files).map((file) => ({
@@ -66,7 +100,7 @@ function App() {
     setPendingUploads((prevFiles) => [...prevFiles, ...newFiles]);
   };
 
-  // Update the caption of a specific pending upload
+  // Handles caption changes for a specific pending upload
   const handleCaptionChange = (itemId, newCaption) => {
     setPendingUploads((prevItems) => {
       const updatedItems = prevItems.map((item) => {
@@ -80,7 +114,7 @@ function App() {
     });
   };
 
-  // Remove a pending upload item from the state based on its itemId.
+  // Handles deletion of a pending upload
   const handlePreviewDelete = (itemId) => {
     // console.log('delete');
     setPendingUploads((prevItems) => {
@@ -89,7 +123,7 @@ function App() {
     });
   };
 
-  // Resizes an image file and returns a Promise that resolves with the resized image as a Blob.
+  // Resizes an image file and returns a Promise that resolves with the resized image as a Blob
   const resizeImage = (file) => {
     return new Promise((resolve) => {
       if (file) {
@@ -137,8 +171,8 @@ function App() {
       }
     });
   };
- 
-  // Submit and upload image files to Firebase Storage
+
+  // Submits and uploads image files to Firebase Storage
   const handleSubmit = (event) => {
     if (pendingUploads.length === 0) return;
 
@@ -167,18 +201,6 @@ function App() {
       return uploadBytes(itemRef, blobToUpload, metadata)
         .then((snapshot) => {
           console.log(`Uploaded ${item.file.name}!`);
-          // Return the promise for getting the download URL
-          return getDownloadURL(snapshot.ref);
-        })
-        .then(async (url) => {
-          const metadata = await getMetadata(ref(storage, url));  // Fetch metadata for the URL
-          const timeCreated = metadata.timeCreated;  // Extract timeCreated from metadata
-        
-          return {
-            url: url,
-            caption: item.caption,
-            timeCreated: timeCreated  // Include timeCreated in the returned object
-          };
         })
         .catch((error) => {
           console.error(error);
@@ -186,26 +208,27 @@ function App() {
         });
     });
 
-    Promise.all(uploadPromises).then(results => {
-      // Filter out null values (or other error indicators) if any
-      const successfulUploads = results.filter(result => result !== null);
-      
-      // Update state
-      setGalleryItems([]);
+    Promise.all(uploadPromises).then(() => {  
+      // Reset state
+      setAllGalleryItems([]);
+      setPaginatedGalleryItems([]);
       setPendingUploads([]);
       setLoading(false);
-
-      // Fetch gallery items again
-      fetchGalleryItems();
+      setEffectKey(prev => prev + 1);
     });
   };
 
-  const Cards = galleryItems.slice().reverse().map((item) => (
+  const Cards = paginatedGalleryItems.map((item) => (
     <Card
       key={item.url}
       url={item.url}
       caption={item.caption}
+      loading={loading}
     />
+  ));
+
+  const CardSkeletons = Array(numOfSkeletons).fill(0).map(item => (
+    <CardSkeleton key={v4()} />
   ));
 
   const imagePreviews = pendingUploads.map((item) => (
@@ -221,7 +244,7 @@ function App() {
     <>
       <section className="vkw-hero">
         <div className="vkw-hero__container">
-          <h1 className="vkw-hero__title">Evangelos & Katerina's<br />Collective Photo Album</h1>
+          <h1 className="vkw-hero__title">Evangelos & Katerina<br />Collective Photo Album</h1>
           <div className="vkw-hero__subtitle">Capturing Love, Laughter,<br />and Cherished Moments</div>
         </div>
         <Flower />
@@ -235,14 +258,14 @@ function App() {
           </label>
           <div className="vkw-dropzone__previews">
             <input
-              title=""
+              disabled={loading}
               onChange={handleChange}
               className="vkw-dropzone__input"
               id="photoUploadInput"
               type="file"
               accept=".png, .jpg, .jpeg"
               multiple
-              max="3"
+              max="4"
             />
             {
               pendingUploads.length === 0 
@@ -274,6 +297,25 @@ function App() {
         </div>
       </section>
 
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        numOfItems={numOfItems}
+        onPageChange={handlePageChange}
+      />
+
+      {loading &&
+        <section className="vkw-gallery">
+          <div className="vkw-gallery__container">
+            <ResponsiveMasonry columnsCountBreakPoints={{320: 2, 767: 3, 1024: 4}}>
+              <Masonry gutter="20px">
+                {CardSkeletons}
+              </Masonry>
+            </ResponsiveMasonry>
+          </div>
+        </section>
+      }
+
       <section className="vkw-gallery">
         <div className="vkw-gallery__container">
           <ResponsiveMasonry columnsCountBreakPoints={{320: 2, 767: 3, 1024: 4}}>
@@ -283,6 +325,13 @@ function App() {
           </ResponsiveMasonry>
         </div>
       </section>
+
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        numOfItems={numOfItems}
+        onPageChange={handlePageChange}
+      />
 
       <div className="vkw-copyright">Web app by <a href="https://www.msof.me/" rel="noreferrer" target="_blank">Marios Sofokleous</a></div>
     </>
