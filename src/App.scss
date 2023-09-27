@@ -183,6 +183,9 @@
     font-weight: 400;
     font-size: 12px;
     color: #0D0000;
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
   &__delete {
     position: absolute;
@@ -194,6 +197,9 @@
     height: 32px;
     background-color: rgba(0,0,0,0.75);
     cursor: pointer;
+    &:disabled {
+      cursor: not-allowed;
+    }
     svg {
       width: 32px;
       height: 32px;

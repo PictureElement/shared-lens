@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactComponent as CloseIcon } from './icons/close.svg';
 
-function Preview({ item, onCaptionChange, onPreviewDelete }) {
+function Preview({ loading, item, onCaptionChange, onPreviewDelete }) {
 
   const handleChange = (e) => {
     const caption = e.target.value;
@@ -20,13 +20,14 @@ function Preview({ item, onCaptionChange, onPreviewDelete }) {
     <div className="vkw-preview">
       <img className="vkw-preview__image" src={URL.createObjectURL(item.file)} alt="Preview" />
       <input
+        disabled={loading}
         className="vkw-preview__input"
         type="text"
         value={item.caption}
         onChange={handleChange}
         placeholder="Enter caption"
       />
-      <button onClick={handleClick} className="vkw-preview__delete"><CloseIcon /></button>
+      <button disabled={loading} onClick={handleClick} className="vkw-preview__delete"><CloseIcon /></button>
     </div>
   )
 }

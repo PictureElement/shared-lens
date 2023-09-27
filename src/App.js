@@ -61,6 +61,7 @@ function App() {
         setAllGalleryItems([...allGalleryObjects]);
         setPaginatedGalleryItems([...paginatedGalleryObjects]);
 
+        setPendingUploads([]);
         setLoading(false);
       })
       // Handle any fetch errors for URLs or metadata
@@ -218,7 +219,6 @@ function App() {
       setLoading(false);
       setCurrentPage(1);
       setNumOfItems(0);
-      setPendingUploads([]);
       setEffectKey(prev => prev + 1);
     });
   };
@@ -234,6 +234,7 @@ function App() {
 
   const imagePreviews = pendingUploads.map((item) => (
     <Preview
+      loading={loading}
       key={item.id}
       item={item}
       onCaptionChange={handleCaptionChange}
