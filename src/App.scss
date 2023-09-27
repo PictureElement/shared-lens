@@ -9,28 +9,13 @@
     z-index: 1;
     font-family: 'Playfair Display', serif;
     font-weight: 700;
-    font-size: 40px;
+    font-size: 36px;
     line-height: 1.2;
     color: #F26D91;
     text-align: center;
-    margin: 0 auto 12px auto;
+    margin: 0 auto 20px auto;
     @media (max-width: 575px) {
       font-size: 24px;
-      margin-bottom: 4px;
-    }
-  }
-  &__subtitle {
-    position: relative;
-    z-index: 1;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 1.5;
-    color: #e8eaed;
-    text-align: center;
-    margin: 0 auto;
-    @media (max-width: 575px) {
-      font-size: 16px;
     }
   }
   &__container {
@@ -43,7 +28,7 @@
     z-index: 1;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 20px;
     display: block;
     width: 100%;
     background-color: #F26D91;
@@ -71,6 +56,9 @@
       margin-inline-end: 4px;
     }
   }
+  @media (max-width: 575px) {
+    padding: 40px 0 40px 0; 
+  }
 }
 
 // Flower
@@ -94,9 +82,8 @@
 .vkw-dropzone {
   position: relative;
   z-index: 1;
-  background-color: #686060;
-  padding: 60px 0;
-  margin-bottom: 60px;
+  max-width: 387px;
+  margin: 0 auto;
   &__container {
     max-width: 800px;
     margin: 0 auto;
@@ -109,33 +96,24 @@
     font-size: 16px;
     margin-bottom: 8px;
     color: #e8eaed;
-  }
-  &__previews {
-    position: relative;
-    min-height: 96px;
-    padding: 16px;
-    border: 2px dashed #e8eaed;
-    margin-bottom: 16px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    @media (max-width: 767px) {
-      grid-template-columns: repeat(2, 1fr);
+    @media (max-width: 575px) {
+      font-size: 14px;
     }
   }
+  &__area {
+    position: relative;
+  }
   &__input {
+    border: 2px dashed #e8eaed;
+    position: relative;
     z-index: 1;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
     cursor: pointer;
     display: block;
+    min-height: 96px;
     width: 100%;
-    height: 100%;
     color: transparent;
     &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 255, 255, 0.2);
     }
     &:disabled {
       cursor: not-allowed;
@@ -151,6 +129,7 @@
     inset-inline-start: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    z-index: 0;
     > svg {
       fill: #e8eaed;
     }
@@ -159,6 +138,60 @@
       font-family: 'Poppins', sans-serif;
       font-weight: 400;
       font-size: 12px;
+    }
+  }
+  @media (max-width: 575px) {
+    max-width: 258px;
+  }
+}
+
+// Previews
+.vkw-previews {
+  position: relative;
+  padding: 40px 0 40px 0;
+  background-color: #F6F4F3;
+  &__title {
+    display: block;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    margin: 0;
+    color: #0D0000;
+  }
+  &__container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 16px;
+    position: relative;
+  }
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+    @media (max-width: 767px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  &__clear {
+    border: none;
+    display: block;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    margin: 0;
+    color: #0D0000;
+    background-color: transparent;
+    text-decoration: underline;
+    padding: 0;
+    line-height: 1.15;
+    cursor: pointer;
+    &:hover {
+      text-decoration: none;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      text-decoration: underline;
     }
   }
 }
@@ -173,6 +206,7 @@
     width: 100%;
     object-fit: cover;
     margin-bottom: 16px;
+    z-index: 0;
   }
   &__input {
     padding: 4px;
@@ -187,29 +221,11 @@
       cursor: not-allowed;
     }
   }
-  &__delete {
-    position: absolute;
-    top: 3px;
-    inset-inline-end: 3px;
-    border: none;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    background-color: rgba(0,0,0,0.75);
-    cursor: pointer;
-    &:disabled {
-      cursor: not-allowed;
-    }
-    svg {
-      width: 32px;
-      height: 32px;
-      fill: #e8eaed;
-    }
-  }
 }
 
 // Pagination
 .vkw-pagination {
+  margin-top: 40px;
   &__container {
     max-width: 1320px;
     margin: 0 auto;

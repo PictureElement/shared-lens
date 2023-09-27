@@ -25,6 +25,7 @@ function App() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [numOfItems, setNumOfItems] = React.useState(0);
   const [effectKey, setEffectKey] = React.useState(0);
+  const fileInputRef = React.useRef(null);
   
   // Fetches gallery items from Firebase Storage and sets up pagination
   const fetchGalleryItems = () => {
@@ -120,12 +121,12 @@ function App() {
     });
   };
 
-  // Handles deletion of a pending upload
-  const handlePreviewDelete = (itemId) => {
-    setPendingUploads((prevItems) => {
-      const updatedItems = prevItems.filter(item => item.id !== itemId);
-      return updatedItems;
-    });
+  // Handles deletion of all pending uploads
+  const handleClearPendingUploads = (itemId) => {
+    // Clear the file input values to allow re-drop of files
+    fileInputRef.current.value = null;
+    // Clear state
+    setPendingUploads([]);
   };
 
   // Resizes an image file and returns a Promise that resolves with the resized image as a Blob
@@ -240,7 +241,6 @@ function App() {
       key={item.id}
       item={item}
       onCaptionChange={handleCaptionChange}
-      onPreviewDelete={handlePreviewDelete}
     />
   ));
   
@@ -248,57 +248,56 @@ function App() {
     <>
       <section className="vkw-hero">
         <div className="vkw-hero__container">
-          <h1 className="vkw-hero__title">Evangelos & Katerina<br />Collective Photo Album</h1>
-          <div className="vkw-hero__subtitle">Capturing Love, Laughter,<br />and Cherished Moments</div>
+          <h1 className="vkw-hero__title">Evangelos & Katerina's<br />collective photo album</h1>
+          <div className="vkw-dropzone">
+            <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
+              Upload your photos:
+            </label>
+            <div className="vkw-dropzone__area">
+              <input
+                ref={fileInputRef}
+                disabled={loading}
+                onChange={handleChange}
+                className="vkw-dropzone__input"
+                id="photoUploadInput"
+                type="file"
+                accept=".png, .jpg, .jpeg"
+              />
+              <div className="vkw-dropzone__icon">
+                <AddPhotoIcon />
+                <div>Drop up to 4 files.</div>
+              </div>
+            </div>
+          </div>
         </div>
         <Flower />
       </section>
 
-      <section className="vkw-dropzone">
-        <div className="vkw-dropzone__container">
-          <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
-            Upload Your Photos:
-            {pendingUploads.length > 0 && ` (${pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen)`}
-          </label>
-          <div className="vkw-dropzone__previews">
-            <input
-              disabled={loading}
-              onChange={handleChange}
-              className="vkw-dropzone__input"
-              id="photoUploadInput"
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              multiple
-            />
-            {
-              pendingUploads.length === 0 
-                ? (
-                    <div className="vkw-dropzone__icon">
-                      <AddPhotoIcon />
-                      <div>Drop up to 4 files.</div>
-                    </div>
-                  ) 
-                : null
-            }
-            { pendingUploads.length > 0 
-              ? imagePreviews
-              : null 
-            }
+      {pendingUploads.length > 0 && (
+        <div className="vkw-previews">
+          <div className="vkw-previews__container">
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px"}}>
+              <h2 className="vkw-previews__title">{pendingUploads.length > 0 && `${pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen`}</h2>
+              <button disabled={loading} onClick={handleClearPendingUploads} className="vkw-previews__clear">Clear all</button>
+            </div>
+            <div className="vkw-previews__grid">
+              {imagePreviews}
+            </div>
+            <button disabled={loading} className="vkw-hero__submit" onClick={handleSubmit}>
+              {submitting ? (
+                <>
+                  <span className="vkw-hero__submit-spinner" role="status" aria-hidden="true"></span>
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  Submit
+                </>
+              )}
+            </button>
           </div>
-          <button disabled={loading} className="vkw-hero__submit" onClick={handleSubmit}>
-            {submitting ? (
-              <>
-                <span className="vkw-hero__submit-spinner" role="status" aria-hidden="true"></span>
-                Submitting...
-              </>
-            ) : (
-              <>
-                Submit
-              </>
-            )}
-          </button>
         </div>
-      </section>
+      )}
 
       {loading ? null : (
         <Pagination
