@@ -12,10 +12,8 @@ import Pagination from './Pagination';
 import { ThreeDots } from  'react-loader-spinner';
 import BackToTopButton from './BackToTopButton';
 
-// const itemsPerPage = 4; // Set the number of items to display per page
-const itemsPerPage = 12; // Set the number of items to display per page
+const itemsPerPage = 24; // Set the number of items to display per page
 // const itemsPerPage = 60; // Set the number of items to display per page
-// const numOfSkeletons = 60;
 
 function App() {
   // State initialization
@@ -44,11 +42,15 @@ function App() {
       })
       .then(([urls, metadataArr]) => {
         // Process the fetched data and set the state
-        let allGalleryObjects = urls.map((url, index) => ({
-          url,
-          caption: metadataArr[index].customMetadata.caption,
-          timeCreated: metadataArr[index].timeCreated
-        }));
+        let allGalleryObjects = urls.map((url, index) => {
+          const customMetadata = metadataArr[index]?.customMetadata;
+          const caption = customMetadata?.caption || null;
+          return {
+            url,
+            caption,
+            timeCreated: metadataArr[index]?.timeCreated || null
+          };
+        });
 
         // Sort all items in reverse chronological order
         allGalleryObjects = allGalleryObjects.sort((a, b) => new Date(b.timeCreated) - new Date(a.timeCreated));
@@ -213,10 +215,10 @@ function App() {
       // Reset state
       setAllGalleryItems([]);
       setPaginatedGalleryItems([]);
-      setPendingUploads([]);
       setLoading(false);
       setCurrentPage(1);
       setNumOfItems(0);
+      setPendingUploads([]);
       setEffectKey(prev => prev + 1);
     });
   };

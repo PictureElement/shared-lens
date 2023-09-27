@@ -328,6 +328,7 @@
 }
 
 .vkw-back-to-top-button {
+  z-index: 1000;
   display: none;
   position: fixed;
   bottom: 16px;
