@@ -20,6 +20,7 @@ function App() {
   const [allGalleryItems, setAllGalleryItems] = React.useState([]);
   const [paginatedGalleryItems, setPaginatedGalleryItems] = React.useState([]);
   const [pendingUploads, setPendingUploads] = React.useState([]);
+  const [submitting, setSubmitting] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [numOfItems, setNumOfItems] = React.useState(0);
@@ -63,6 +64,7 @@ function App() {
 
         setPendingUploads([]);
         setLoading(false);
+        setSubmitting(false);
       })
       // Handle any fetch errors for URLs or metadata
       .catch((error) => {
@@ -186,6 +188,7 @@ function App() {
     }
 
     setLoading(true);
+    setSubmitting(true);
 
     const uploadPromises = pendingUploads.map(async (item) => {
       const resizedBlob = await resizeImage(item.file); // await for resizing to be done
@@ -267,7 +270,6 @@ function App() {
               type="file"
               accept=".png, .jpg, .jpeg"
               multiple
-              max="4"
             />
             {
               pendingUploads.length === 0 
@@ -280,15 +282,15 @@ function App() {
                 : null
             }
             { pendingUploads.length > 0 
-              ? imagePreviews 
+              ? imagePreviews
               : null 
             }
           </div>
           <button disabled={loading} className="vkw-hero__submit" onClick={handleSubmit}>
-            {loading ? (
+            {submitting ? (
               <>
                 <span className="vkw-hero__submit-spinner" role="status" aria-hidden="true"></span>
-                Loading...
+                Submitting...
               </>
             ) : (
               <>
