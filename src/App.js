@@ -68,7 +68,7 @@ function App() {
       })
       // Handle any fetch errors for URLs or metadata
       .catch((error) => {
-        console.error(error);
+        alert('Error code: 1');
         setLoading(false);
       });
   };
@@ -122,7 +122,6 @@ function App() {
 
   // Handles deletion of a pending upload
   const handlePreviewDelete = (itemId) => {
-    // console.log('delete');
     setPendingUploads((prevItems) => {
       const updatedItems = prevItems.filter(item => item.id !== itemId);
       return updatedItems;
@@ -207,10 +206,10 @@ function App() {
 
       return uploadBytes(itemRef, blobToUpload, metadata)
         .then((snapshot) => {
-          console.log(`Uploaded ${item.file.name}!`);
+          // console.log(`Uploaded ${item.file.name}!`);
         })
         .catch((error) => {
-          console.error(error);
+          alert('Error code: 2');
           return null; // Return null or some error indicator for failed uploads
         });
     });
