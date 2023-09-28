@@ -9,7 +9,7 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import { ReactComponent as AddPhotoIcon } from './icons/add-photo.svg';
 import Flower from './Flower';
 import Pagination from './Pagination';
-import { ThreeDots } from  'react-loader-spinner';
+import { ThreeDots, RotatingLines } from  'react-loader-spinner';
 import BackToTopButton from './BackToTopButton';
 
 const itemsPerPage = 24; // Set the number of items to display per page
@@ -21,6 +21,7 @@ function App() {
   const [paginatedGalleryItems, setPaginatedGalleryItems] = React.useState([]);
   const [pendingUploads, setPendingUploads] = React.useState([]);
   const [submitting, setSubmitting] = React.useState(false);
+  const [resizing, setResizing] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [numOfItems, setNumOfItems] = React.useState(0);
@@ -100,6 +101,7 @@ function App() {
   // Handle file input changes.
   // Resize the images before adding them to pending uploads
   const handleChange = async (event) => {
+    setResizing(true);
     const newFiles = await Promise.all(Array.from(event.target.files).map(async (file) => {
       const resizedBlob = await resizeImage(file); // Resize the image
       return {
@@ -108,6 +110,7 @@ function App() {
         caption: ''
       };
     }));
+    setResizing(false);
     setPendingUploads((prevFiles) => [...prevFiles, ...newFiles]);
   };
 
@@ -258,7 +261,7 @@ function App() {
                 title=""
                 multiple
                 ref={fileInputRef}
-                disabled={loading || pendingUploads.length >= 4}
+                disabled={loading || pendingUploads.length >= 4 || resizing}
                 onChange={handleChange}
                 className="vkw-dropzone__input"
                 id="photoUploadInput"
@@ -266,7 +269,17 @@ function App() {
                 accept=".png, .jpg, .jpeg"
               />
               <div className="vkw-dropzone__icon">
-                <AddPhotoIcon />
+                {resizing ? (
+                  <RotatingLines
+                    strokeColor="#F26D91"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="48"
+                    visible={true}
+                  />
+                ) : (
+                  <AddPhotoIcon />
+                )}
                 <div>Drop up to 4 files.</div>
               </div>
             </div>
