@@ -97,12 +97,16 @@ function App() {
     setLoading(false);
   }
     
-  // Handle file input changes
-  const handleChange = (event) => {
-    const newFiles = Array.from(event.target.files).map((file) => ({
-      id: v4(),
-      file,
-      caption: ''
+  // Handle file input changes.
+  // Resize the images before adding them to pending uploads
+  const handleChange = async (event) => {
+    const newFiles = await Promise.all(Array.from(event.target.files).map(async (file) => {
+      const resizedBlob = await resizeImage(file); // Resize the image
+      return {
+        id: v4(),
+        file: resizedBlob || file, // Use the resized image if available, else use the original
+        caption: ''
+      };
     }));
     setPendingUploads((prevFiles) => [...prevFiles, ...newFiles]);
   };
@@ -140,8 +144,6 @@ function App() {
           img.src = e.target.result;
   
           img.onload = function () {
-            const canvas = document.createElement('canvas');
-  
             const MAX_WIDTH = 1600;
             const MAX_HEIGHT = 1600;
             let width = img.width;
@@ -158,7 +160,8 @@ function App() {
                 height = MAX_HEIGHT;
               }
             }
-  
+            
+            const canvas = document.createElement('canvas');
             canvas.width = width;
             canvas.height = height;
   
@@ -179,11 +182,10 @@ function App() {
   };
 
   // Submits and uploads image files to Firebase Storage
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     if (pendingUploads.length === 0) return;
 
     let uploadsToProcess = [...pendingUploads];  // Create a copy of the pending uploads
-
     if (uploadsToProcess.length > 4) {
       uploadsToProcess = uploadsToProcess.slice(0, 4);  // Keep only the first 4 elements
     }
@@ -192,8 +194,6 @@ function App() {
     setSubmitting(true);
 
     const uploadPromises = uploadsToProcess.map(async (item) => {
-      const resizedBlob = await resizeImage(item.file); // await for resizing to be done
-
       // Create a reference
       const itemRef = ref(storage, v4());
 
@@ -203,10 +203,7 @@ function App() {
         }
       };
       
-      // if resizedBlob is not null, upload it; else upload the original file
-      const blobToUpload = resizedBlob || item.file;
-
-      return uploadBytes(itemRef, blobToUpload, metadata)
+      return uploadBytes(itemRef, item.file, metadata)
         .then((snapshot) => {
           // console.log(`Uploaded ${item.file.name}!`);
         })
@@ -216,15 +213,15 @@ function App() {
         });
     });
 
-    Promise.all(uploadPromises).then(() => {  
-      // Reset state
-      setAllGalleryItems([]);
-      setPaginatedGalleryItems([]);
-      setLoading(false);
-      setCurrentPage(1);
-      setNumOfItems(0);
-      setEffectKey(prev => prev + 1);
-    });
+    await Promise.all(uploadPromises);
+    
+    // Reset state
+    setAllGalleryItems([]);
+    setPaginatedGalleryItems([]);
+    setLoading(false);
+    setCurrentPage(1);
+    setNumOfItems(0);
+    setEffectKey(prev => prev + 1);
   };
 
   const Cards = paginatedGalleryItems.map((item) => (
