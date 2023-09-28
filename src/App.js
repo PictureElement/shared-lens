@@ -14,6 +14,15 @@ import BackToTopButton from './BackToTopButton';
 
 const itemsPerPage = 60; // Set the number of items to display per page
 
+// Comprehensive detection of the Facebook in-app browser
+function isFacebookInAppBrowser() {
+  const isUserAgentMatch = navigator.userAgent.match(/FBAN|FBAV/i);
+  const isGlobalVariableDefined = typeof FB_IAB !== 'undefined';
+  const isClassListContains = document.documentElement.classList.contains('in-app-browser');
+
+  return isUserAgentMatch || isGlobalVariableDefined || isClassListContains;
+}
+
 function App() {
   // State initialization
   const [allGalleryItems, setAllGalleryItems] = React.useState([]);
@@ -73,6 +82,15 @@ function App() {
         setLoading(false);
       });
   };
+
+  // Detect Facebook in-app browser on the first render
+  React.useEffect(() => {
+    const isUsingFacebookInAppBrowser = isFacebookInAppBrowser();
+  
+    if (isUsingFacebookInAppBrowser) {
+      alert('You are currently using the Facebook in-app browser, which may not provide the best experience. For optimal performance, please open this app in Chrome, Firefox, Safari, or Opera.')
+    }
+  }, []);
 
   // Fetches gallery items on component mount or whenever effectKey changes
   React.useEffect(() => {
