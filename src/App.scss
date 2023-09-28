@@ -169,6 +169,12 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     margin-bottom: 16px;
+    .vkw-preview:nth-child(1),
+    .vkw-preview:nth-child(2),
+    .vkw-preview:nth-child(3),
+    .vkw-preview:nth-child(4) {
+      display: block;
+    }
     @media (max-width: 767px) {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -200,6 +206,7 @@
 .vkw-preview {
   position: relative;
   z-index: 2;
+  display: none;
   &__image {
     display: block;
     aspect-ratio: 1 / 1;

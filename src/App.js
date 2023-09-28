@@ -182,15 +182,16 @@ function App() {
   const handleSubmit = (event) => {
     if (pendingUploads.length === 0) return;
 
-    if (pendingUploads.length > 4) {
-      alert('You can only upload a maximum of 4 files at a time.');
-      return;
+    let uploadsToProcess = [...pendingUploads];  // Create a copy of the pending uploads
+
+    if (uploadsToProcess.length > 4) {
+      uploadsToProcess = uploadsToProcess.slice(0, 4);  // Keep only the first 4 elements
     }
 
     setLoading(true);
     setSubmitting(true);
 
-    const uploadPromises = pendingUploads.map(async (item) => {
+    const uploadPromises = uploadsToProcess.map(async (item) => {
       const resizedBlob = await resizeImage(item.file); // await for resizing to be done
 
       // Create a reference
@@ -251,12 +252,16 @@ function App() {
           <h1 className="vkw-hero__title">Evangelos & Katerina's<br />collective photo album</h1>
           <div className="vkw-dropzone">
             <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
-              Upload your photos:
+              {pendingUploads.length < 4
+                ? "Select your photos:"
+                : <span style={{color:"#dc3545"}}>You've hit the 4-file selection limit.</span>}
             </label>
             <div className="vkw-dropzone__area">
               <input
+                title=""
+                multiple
                 ref={fileInputRef}
-                disabled={loading}
+                disabled={loading || pendingUploads.length >= 4}
                 onChange={handleChange}
                 className="vkw-dropzone__input"
                 id="photoUploadInput"
@@ -277,7 +282,7 @@ function App() {
         <div className="vkw-previews">
           <div className="vkw-previews__container">
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px"}}>
-              <h2 className="vkw-previews__title">{pendingUploads.length > 0 && `${pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen`}</h2>
+              <h2 className="vkw-previews__title">{pendingUploads.length > 0 && `${pendingUploads.length > 4 ? '4' : pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen`}</h2>
               <button disabled={loading} onClick={handleClearPendingUploads} className="vkw-previews__clear">Clear all</button>
             </div>
             <div className="vkw-previews__grid">
@@ -287,11 +292,11 @@ function App() {
               {submitting ? (
                 <>
                   <span className="vkw-hero__submit-spinner" role="status" aria-hidden="true"></span>
-                  Submitting...
+                  Uploading...
                 </>
               ) : (
                 <>
-                  Submit
+                  Upload
                 </>
               )}
             </button>
