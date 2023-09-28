@@ -2,14 +2,8 @@ import React from 'react';
 
 function Preview({ loading, item, onCaptionChange }) {
 
-  console.log("rendered");
-
   const handleChange = (e) => {
     const caption = e.target.value;
-
-    console.log(item.id);
-    console.log(caption);
-
     onCaptionChange(item.id, caption);
   }
 
