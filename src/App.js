@@ -12,8 +12,7 @@ import Pagination from './Pagination';
 import { ThreeDots, RotatingLines } from  'react-loader-spinner';
 import BackToTopButton from './BackToTopButton';
 
-const itemsPerPage = 24; // Set the number of items to display per page
-// const itemsPerPage = 60; // Set the number of items to display per page
+const itemsPerPage = 60; // Set the number of items to display per page
 
 function App() {
   // State initialization

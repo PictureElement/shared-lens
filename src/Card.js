@@ -1,4 +1,5 @@
 import React from 'react';
+import LazyLoad from 'react-lazy-load';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -7,7 +8,6 @@ function getRandomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
-
 
 function Card(props) {
   const [imageLoaded, setImageLoaded] = React.useState(false);
@@ -18,16 +18,19 @@ function Card(props) {
 
   return (
     <div className="vkw-card">
-      {/* Skeleton for image */}
-      {!imageLoaded && <Skeleton width={'100%'} height={getRandomInt(100, 300)} />}
-      
-      {/* Display image when loaded */}
-      <img
-        onLoad={handleImageLoad}
-        className={`vkw-card__image ${imageLoaded ? 'loaded' : ''}`}
-        alt="..."
-        src={props.url}
-      />
+      <LazyLoad>
+        <>
+          {!imageLoaded && <Skeleton width={'100%'} height={getRandomInt(100, 300)} />}
+
+          {/* Display image when loaded */}
+          <img
+            onLoad={handleImageLoad}
+            className={`vkw-card__image ${imageLoaded ? 'loaded' : ''}`}
+            alt="..."
+            src={props.url}
+          />
+        </>
+      </LazyLoad>
 
       {/* Display caption if available. Show skeleton until image is fully loaded */}
       {props.caption && (

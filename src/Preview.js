@@ -28,8 +28,7 @@ export default Preview;
 import React from 'react';
 
 const Preview = React.memo(({ loading, item, onCaptionChange }) => {
-  console.log("rendered");
-
+  
   const handleChange = (e) => {
     const caption = e.target.value;
     onCaptionChange(item.id, caption);
