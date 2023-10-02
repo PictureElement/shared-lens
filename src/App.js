@@ -155,45 +155,19 @@ function App() {
 
   // Resizes an image file and returns a Promise that resolves with the resized image as a Blob
   const resizeImage = (file) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (file) {
-        const img = new Image();
         const reader = new FileReader();
-  
-        reader.onload = function (e) {
-          img.src = e.target.result;
-  
-          img.onload = function () {
-            const MAX_WIDTH = 1600;
-            const MAX_HEIGHT = 1600;
-            let width = img.width;
-            let height = img.height;
-  
-            if (width > height) {
-              if (width > MAX_WIDTH) {
-                height *= MAX_WIDTH / width;
-                width = MAX_WIDTH;
-              }
-            } else {
-              if (height > MAX_HEIGHT) {
-                width *= MAX_HEIGHT / height;
-                height = MAX_HEIGHT;
-              }
-            }
-            
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-  
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-  
-            canvas.toBlob(function (blob) {
-              resolve(blob);
-            }, 'image/webp', 0.7);
-          };
-        };
-  
+        
+        reader.onload = function(e) {
+          const srcBlob = new Blob([file], { type: file.type });
+          const reduce = require('image-blob-reduce')();
+          reduce
+            .toBlob(srcBlob, { max: 1600 })
+            .then(blob => resolve(blob))
+            .catch(error => reject(error));
+        }
+
         reader.readAsDataURL(file);
       } else {
         resolve(null);
