@@ -1,6 +1,73 @@
-# Getting Started with Create React App
+# Your App Name
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Description of your app goes here]
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Overview
+
+This React Single Page Application (SPA) is a collective photo album. It allows users to upload and view photos in a gallery-style layout.
+
+## Features
+
+- **Image Upload:**
+  Users can upload photos to the gallery. The app supports resizing images before upload for a better user experience.
+
+- **Pagination:**
+  The gallery is paginated, displaying a fixed number of items per page to enhance performance and navigation.
+
+- **Facebook In-App Browser Detection:**
+  The app detects when it's being viewed in the Facebook in-app browser and provides a message to encourage optimal browser usage.
+
+- **Responsive Design:**
+  The app is designed to be responsive, ensuring a consistent user experience across different devices.
+
+- **Loading States:**
+  Various loading indicators and states are implemented to enhance user feedback during image processing and loading.
+
+## Installation
+
+To set up the project locally, follow these steps:
+
+1. Clone the repository:
+
+    ```bash
+    git clone [repository_url]
+    cd [repository_name]
+    ```
+
+2. Install dependencies:
+
+    ```bash
+    npm install
+    ```
+
+3. Run the app locally:
+
+    ```bash
+    npm start
+    ```
+
+## Usage
+
+1. Access the application at the provided URL or run it locally.
+2. Upload your photos by dragging and dropping or selecting them using the file input.
+3. Browse the gallery and enjoy the photos.
+
+## Contributing
+
+We welcome contributions! Feel free to fork the repository and submit pull requests to contribute to this project.
+
+## License
+
+[Your License Information Here]
 
 ## Available Scripts
 
@@ -39,43 +106,13 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-### Project To-do List
+## Project To-do List
 
 1. Paginate results
 2. Set maximum number of upload items (client (done) + backend)
 3. Image resizing (client (done) + backend)
 4. File type check (client + backend)
 
-### Deploy to firebase
+## Deploy to firebase
 
 `firebase deploy`
