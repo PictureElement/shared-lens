@@ -12,7 +12,11 @@ import Pagination from './Pagination';
 import { ThreeDots, RotatingLines } from  'react-loader-spinner';
 import BackToTopButton from './BackToTopButton';
 
-const itemsPerPage = 60; // Set the number of items to display per page
+const itemsPerPage = parseInt(process.env.REACT_APP_ITEMS_PER_PAGE, 10) || 60;
+const maxImageSize = parseInt(process.env.REACT_APP_MAX_IMAGE_SIZE, 10) || 1600;
+const blobType = process.env.REACT_APP_BLOB_TYPE || 'image/webp';
+const blobQuality = parseFloat(process.env.REACT_APP_BLOB_QUALITY) || 0.8;
+const maxFileSelection = parseInt(process.env.REACT_APP_MAX_FILE_SELECTION, 10) || 8;
 
 // Comprehensive detection of the Facebook in-app browser
 function isFacebookInAppBrowser() {
@@ -156,22 +160,48 @@ function App() {
   // Resizes an image file and returns a Promise that resolves with the resized image as a Blob
   const resizeImage = (file) => {
     return new Promise((resolve, reject) => {
-      if (file) {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-          const srcBlob = new Blob([file], { type: file.type });
-          const reduce = require('image-blob-reduce')();
-          reduce
-            .toBlob(srcBlob, { max: 1600 })
+      if (!file) {
+        resolve(null);
+        return;
+      }
+      
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+          
+        const img = new Image();
+
+        img.onload = function() {
+          const pica = require('pica')();
+
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxImageSize) {
+              height *= maxImageSize / width;
+              width = maxImageSize;
+            }
+          } else {
+            if (height > maxImageSize) {
+              width *= maxImageSize / height;
+              height = maxImageSize;
+            }
+          }
+
+          const offscreenCanvas = new OffscreenCanvas(width, height);
+
+          // Resize & convert to blob
+          pica.resize(img, offscreenCanvas)
+            .then(result => pica.toBlob(result, blobType, blobQuality))
             .then(blob => resolve(blob))
             .catch(error => reject(error));
         }
 
-        reader.readAsDataURL(file);
-      } else {
-        resolve(null);
+        img.src = e.target.result;
       }
+
+      reader.readAsDataURL(file);
     });
   };
 
@@ -180,8 +210,8 @@ function App() {
     if (pendingUploads.length === 0) return;
 
     let uploadsToProcess = [...pendingUploads];  // Create a copy of the pending uploads
-    if (uploadsToProcess.length > 4) {
-      uploadsToProcess = uploadsToProcess.slice(0, 4);  // Keep only the first 4 elements
+    if (uploadsToProcess.length > maxFileSelection) {
+      uploadsToProcess = uploadsToProcess.slice(0, maxFileSelection);  // Keep only the first maxFileSelection elements
     }
 
     setLoading(true);
@@ -240,19 +270,19 @@ function App() {
     <>
       <section className="vkw-hero">
         <div className="vkw-hero__container">
-          <h1 className="vkw-hero__title">Evangelos & Katerina's<br />collective photo album</h1>
+          <h1 className="vkw-hero__title">John and Mary's<br />collective photo album</h1>
           <div className="vkw-dropzone">
             <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
-              {pendingUploads.length < 4
+              {pendingUploads.length < maxFileSelection
                 ? "Select your photos:"
-                : <span style={{color:"#dc3545"}}>You've hit the 4-file selection limit.</span>}
+                : <span style={{color:"#dc3545"}}>You've hit the {maxFileSelection}-file selection limit.</span>}
             </label>
             <div className="vkw-dropzone__area">
               <input
                 title=""
                 multiple
                 ref={fileInputRef}
-                disabled={loading || pendingUploads.length >= 4 || resizing}
+                disabled={loading || pendingUploads.length >= maxFileSelection || resizing}
                 onChange={handleChange}
                 className="vkw-dropzone__input"
                 id="photoUploadInput"
@@ -271,7 +301,7 @@ function App() {
                 ) : (
                   <AddPhotoIcon />
                 )}
-                <div>Drop up to 4 files.</div>
+                <div>Drop up to {maxFileSelection} files.</div>
               </div>
             </div>
           </div>
@@ -283,7 +313,7 @@ function App() {
         <div className="vkw-previews">
           <div className="vkw-previews__container">
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px"}}>
-              <h2 className="vkw-previews__title">{pendingUploads.length > 0 && `${pendingUploads.length > 4 ? '4' : pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen`}</h2>
+              <h2 className="vkw-previews__title">{pendingUploads.length > 0 && `${pendingUploads.length > maxFileSelection ? maxFileSelection : pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen`}</h2>
               <button disabled={loading} onClick={handleClearPendingUploads} className="vkw-previews__clear">Clear all</button>
             </div>
             <div className="vkw-previews__grid">
