@@ -12,11 +12,21 @@ import Pagination from './Pagination';
 import { ThreeDots, RotatingLines } from  'react-loader-spinner';
 import BackToTopButton from './BackToTopButton';
 
+// Configuration
 const itemsPerPage = parseInt(process.env.REACT_APP_ITEMS_PER_PAGE, 10) || 60;
 const maxImageSize = parseInt(process.env.REACT_APP_MAX_IMAGE_SIZE, 10) || 1600;
 const blobType = process.env.REACT_APP_BLOB_TYPE || 'image/webp';
 const blobQuality = parseFloat(process.env.REACT_APP_BLOB_QUALITY) || 0.8;
 const maxFileSelection = parseInt(process.env.REACT_APP_MAX_FILE_SELECTION, 10) || 8;
+const columnsBreakpoint1 = process.env.REACT_APP_COLUMNS_BREAKPOINT_1 || '320:2';
+const columnsBreakpoint2 = process.env.REACT_APP_COLUMNS_BREAKPOINT_2 || '767:3';
+const columnsBreakpoint3 = process.env.REACT_APP_COLUMNS_BREAKPOINT_3 || '1024:4';
+const columnsCountBreakPoints = {
+  [columnsBreakpoint1.split(':')[0]]: parseInt(columnsBreakpoint1.split(':')[1], 10),
+  [columnsBreakpoint2.split(':')[0]]: parseInt(columnsBreakpoint2.split(':')[1], 10),
+  [columnsBreakpoint3.split(':')[0]]: parseInt(columnsBreakpoint3.split(':')[1], 10)
+};
+const masonryGutter = process.env.REACT_APP_MASONRY_GUTTER || '20px';
 
 // Comprehensive detection of the Facebook in-app browser
 function isFacebookInAppBrowser() {
@@ -356,8 +366,8 @@ function App() {
             visible={loading}
           />
           {loading ? null : (
-            <ResponsiveMasonry columnsCountBreakPoints={{ 320: 2, 767: 3, 1024: 4 }}>
-              <Masonry gutter="20px">
+            <ResponsiveMasonry columnsCountBreakPoints={columnsCountBreakPoints}>
+              <Masonry gutter={masonryGutter}>
                 {Cards}
               </Masonry>
             </ResponsiveMasonry>
