@@ -13,6 +13,7 @@ import { ThreeDots, RotatingLines } from  'react-loader-spinner';
 import BackToTopButton from './BackToTopButton';
 
 // Configuration
+const heroTitle = process.env.REACT_APP_HERO_TITLE || "Welcome to <em>SharedLens</em><br />Your collective photo gallery";
 const itemsPerPage = parseInt(process.env.REACT_APP_ITEMS_PER_PAGE, 10) || 60;
 const maxImageSize = parseInt(process.env.REACT_APP_MAX_IMAGE_SIZE, 10) || 1600;
 const blobType = process.env.REACT_APP_BLOB_TYPE || 'image/webp';
@@ -280,7 +281,7 @@ function App() {
     <>
       <section className="vkw-hero">
         <div className="vkw-hero__container">
-          <h1 className="vkw-hero__title">John and Mary's<br />collective photo album</h1>
+          <h1 className="vkw-hero__title" dangerouslySetInnerHTML={{ __html: heroTitle }}></h1>
           <div className="vkw-dropzone">
             <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
               {pendingUploads.length < maxFileSelection
