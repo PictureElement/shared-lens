@@ -1,4 +1,4 @@
-# Your App Name
+# SharedLens
 
 [Description of your app goes here]
 
@@ -113,6 +113,6 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 3. Image resizing (client (done) + backend)
 4. File type check (client + backend)
 
-## Deploy to firebase
+## Deploy to Firebase
 
 `firebase deploy`

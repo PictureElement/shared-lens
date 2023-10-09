@@ -279,28 +279,28 @@ function App() {
   
   return (
     <>
-      <section className="vkw-hero">
-        <div className="vkw-hero__container">
-          <h1 className="vkw-hero__title" dangerouslySetInnerHTML={{ __html: heroTitle }}></h1>
-          <div className="vkw-dropzone">
-            <label className="vkw-dropzone__label" htmlFor="photoUploadInput">
+      <section className="sl-hero">
+        <div className="sl-hero__container">
+          <h1 className="sl-hero__title" dangerouslySetInnerHTML={{ __html: heroTitle }}></h1>
+          <div className="sl-dropzone">
+            <label className="sl-dropzone__label" htmlFor="photoUploadInput">
               {pendingUploads.length < maxFileSelection
                 ? "Select your photos:"
                 : <span style={{color:"#dc3545"}}>You've hit the {maxFileSelection}-file selection limit.</span>}
             </label>
-            <div className="vkw-dropzone__area">
+            <div className="sl-dropzone__area">
               <input
                 title=""
                 multiple
                 ref={fileInputRef}
                 disabled={loading || pendingUploads.length >= maxFileSelection || resizing}
                 onChange={handleChange}
-                className="vkw-dropzone__input"
+                className="sl-dropzone__input"
                 id="photoUploadInput"
                 type="file"
                 accept=".png, .jpg, .jpeg"
               />
-              <div className="vkw-dropzone__icon">
+              <div className="sl-dropzone__icon">
                 {resizing ? (
                   <RotatingLines
                     strokeColor="#F26D91"
@@ -321,19 +321,19 @@ function App() {
       </section>
 
       {pendingUploads.length > 0 && (
-        <div className="vkw-previews">
-          <div className="vkw-previews__container">
+        <div className="sl-previews">
+          <div className="sl-previews__container">
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px"}}>
-              <h2 className="vkw-previews__title">{pendingUploads.length > 0 && `${pendingUploads.length > maxFileSelection ? maxFileSelection : pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen`}</h2>
-              <button disabled={loading} onClick={handleClearPendingUploads} className="vkw-previews__clear">Clear all</button>
+              <h2 className="sl-previews__title">{pendingUploads.length > 0 && `${pendingUploads.length > maxFileSelection ? maxFileSelection : pendingUploads.length} file${pendingUploads.length > 1 ? 's' : ''} chosen`}</h2>
+              <button disabled={loading} onClick={handleClearPendingUploads} className="sl-previews__clear">Clear all</button>
             </div>
-            <div className="vkw-previews__grid">
+            <div className="sl-previews__grid">
               {imagePreviews}
             </div>
-            <button disabled={loading} className="vkw-hero__submit" onClick={handleSubmit}>
+            <button disabled={loading} className="sl-hero__submit" onClick={handleSubmit}>
               {submitting ? (
                 <>
-                  <span className="vkw-hero__submit-spinner" role="status" aria-hidden="true"></span>
+                  <span className="sl-hero__submit-spinner" role="status" aria-hidden="true"></span>
                   Uploading...
                 </>
               ) : (
@@ -355,8 +355,8 @@ function App() {
         />
       )}
       
-      <section className="vkw-gallery">
-        <div className="vkw-gallery__container">
+      <section className="sl-gallery">
+        <div className="sl-gallery__container">
           <ThreeDots 
             height="80" 
             width="80" 
@@ -376,7 +376,7 @@ function App() {
         </div>
       </section>
 
-      <div className="vkw-copyright">Web app by <a href="https://www.msof.me/" rel="noreferrer" target="_blank">Marios Sofokleous</a></div>
+      <div className="sl-copyright">Web app by <a href="https://www.msof.me/" rel="noreferrer" target="_blank">Marios Sofokleous</a></div>
 
       <BackToTopButton />
     </>

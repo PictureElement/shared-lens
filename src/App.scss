@@ -1,5 +1,5 @@
 // Hero section
-.vkw-hero {
+.sl-hero {
   background-color: #0D0000;
   padding: 80px 0 80px 0; 
   position: relative;
@@ -67,7 +67,7 @@
 }
 
 // Flower
-.vkw-flower {
+.sl-flower {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -84,7 +84,7 @@
 }
 
 // Dropzone
-.vkw-dropzone {
+.sl-dropzone {
   position: relative;
   z-index: 1;
   max-width: 387px;
@@ -151,7 +151,7 @@
 }
 
 // Previews
-.vkw-previews {
+.sl-previews {
   position: relative;
   padding: 40px 0 40px 0;
   background-color: #ECE2D0;
@@ -202,7 +202,7 @@
 }
 
 // Preview
-.vkw-preview {
+.sl-preview {
   position: relative;
   z-index: 2;
   display: block;
@@ -230,7 +230,7 @@
 }
 
 // Pagination
-.vkw-pagination {
+.sl-pagination {
   margin-top: 40px;
   &__container {
     max-width: 1320px;
@@ -308,7 +308,7 @@
 }
 
 // Gallery
-.vkw-gallery {
+.sl-gallery {
   padding: 32px 0;
   &__container {
     max-width: 1320px;
@@ -318,7 +318,7 @@
 }
 
 // Card
-.vkw-card {
+.sl-card {
   &__image {
     display: none;
     width: 100%;
@@ -337,7 +337,7 @@
 }
 
 // Copyright
-.vkw-copyright {
+.sl-copyright {
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
   font-size: 12px;
@@ -355,7 +355,7 @@
   }
 }
 
-.vkw-back-to-top-button {
+.sl-back-to-top-button {
   z-index: 1000;
   display: none;
   position: fixed;

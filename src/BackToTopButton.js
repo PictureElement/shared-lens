@@ -21,7 +21,7 @@ const BackToTopButton = () => {
 
   return (
     <button
-      className={`vkw-back-to-top-button ${isVisible ? 'visible' : ''}`}
+      className={`sl-back-to-top-button ${isVisible ? 'visible' : ''}`}
       onClick={scrollToTop}
     >
       <ArrowUpwardIcon />

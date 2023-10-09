@@ -46,7 +46,7 @@ function Pagination({ itemsPerPage, currentPage, numOfItems, onPageChange }) {
         return (
           <button
             key={index}
-            className="vkw-pagination__control vkw-pagination__control_ellipsis"
+            className="sl-pagination__control sl-pagination__control_ellipsis"
             disabled
             aria-label="Page ..."
             aria-disabled="true"
@@ -58,7 +58,7 @@ function Pagination({ itemsPerPage, currentPage, numOfItems, onPageChange }) {
         return (
           <button
             key={index}
-            className={page === currentPage ? 'vkw-pagination__control vkw-pagination__control_active' : 'vkw-pagination__control'}
+            className={page === currentPage ? 'sl-pagination__control sl-pagination__control_active' : 'sl-pagination__control'}
             onClick={() => handlePageChange(page)}
             aria-label={`Page ${page}`}
           >
@@ -74,22 +74,22 @@ function Pagination({ itemsPerPage, currentPage, numOfItems, onPageChange }) {
   }
 
   return (
-    <div className="vkw-pagination">
-      <div className="vkw-pagination__container">
+    <div className="sl-pagination">
+      <div className="sl-pagination__container">
         <button
-          className="vkw-pagination__control vkw-pagination__arrow vkw-pagination__arrow_prev"
+          className="sl-pagination__control sl-pagination__arrow sl-pagination__arrow_prev"
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
           aria-label="Previous page"
         >
           <PreviousIcon />
         </button>
-        <div className="vkw-pagination__numbers">
+        <div className="sl-pagination__numbers">
           {generatePagination()}
-          <div className="vkw-pagination__fraction">{currentPage}/{totalPages}</div>
+          <div className="sl-pagination__fraction">{currentPage}/{totalPages}</div>
         </div>
         <button
-          className="vkw-pagination__control vkw-pagination__arrow vkw-pagination__arrow_next"
+          className="sl-pagination__control sl-pagination__arrow sl-pagination__arrow_next"
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
           aria-label="Next page"

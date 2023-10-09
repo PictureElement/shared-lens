@@ -17,7 +17,7 @@ function Card(props) {
   };
 
   return (
-    <div className="vkw-card">
+    <div className="sl-card">
       <LazyLoad>
         <>
           {!imageLoaded && <Skeleton baseColor="#FCDAE4" highlightColor="#FDEDF1" width={'100%'} height={getRandomInt(100, 300)} />}
@@ -25,7 +25,7 @@ function Card(props) {
           {/* Display image when loaded */}
           <img
             onLoad={handleImageLoad}
-            className={`vkw-card__image ${imageLoaded ? 'loaded' : ''}`}
+            className={`sl-card__image ${imageLoaded ? 'loaded' : ''}`}
             alt="..."
             src={props.url}
           />
@@ -34,7 +34,7 @@ function Card(props) {
 
       {/* Display caption if available. Show skeleton until image is fully loaded */}
       {props.caption && (
-        <div className="vkw-card__caption">
+        <div className="sl-card__caption">
           {imageLoaded ? props.caption : <Skeleton baseColor="#FCDAE4" highlightColor="#FDEDF1" count={2} />}
         </div>
       )}

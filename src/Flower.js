@@ -91,7 +91,7 @@ function Flower() {
     };
   }, []); // Empty dependency array to run the effect only once
   return (
-    <svg className="vkw-flower" id="flower-frame" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 641.5 637.3">
+    <svg className="sl-flower" id="flower-frame" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 641.5 637.3">
       <style>
         {`
           .st0 {

@@ -8,11 +8,11 @@ function Preview({ loading, item, onCaptionChange }) {
   }
 
   return (
-    <div className="vkw-preview">
-      <img className="vkw-preview__image" src={URL.createObjectURL(item.file)} alt="Preview" />
+    <div className="sl-preview">
+      <img className="sl-preview__image" src={URL.createObjectURL(item.file)} alt="Preview" />
       <input
         disabled={loading}
-        className="vkw-preview__input"
+        className="sl-preview__input"
         type="text"
         value={item.caption}
         onChange={handleChange}
