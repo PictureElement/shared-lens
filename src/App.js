@@ -134,7 +134,13 @@ function App() {
   // Resize the images before adding them to pending uploads
   const handleChange = async (event) => {
     setResizing(true);
-    const newFiles = await Promise.all(Array.from(event.target.files).map(async (file) => {
+
+    const currentSlots = pendingUploads.length;
+    const remainingSlots = maxFileSelection - currentSlots;
+
+    const selectedFiles = Array.from(event.target.files).slice(0, remainingSlots);
+
+    const newFiles = await Promise.all(selectedFiles.map(async (file) => {
       const resizedBlob = await resizeImage(file); // Resize the image
       return {
         id: v4(),
