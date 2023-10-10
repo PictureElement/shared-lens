@@ -298,7 +298,7 @@ function App() {
                 className="sl-dropzone__input"
                 id="photoUploadInput"
                 type="file"
-                accept=".png, .jpg, .jpeg"
+                accept=".png, .jpg, .jpeg, .webp"
               />
               <div className="sl-dropzone__icon">
                 {resizing ? (
