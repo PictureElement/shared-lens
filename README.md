@@ -1,30 +1,27 @@
 # SharedLens
 
-[Description of your app goes here]
+SharedLens is a React Single Page Application (SPA) that serves as a collective photo album. It allows users to easily upload and view photos in a visually appealing gallery-style layout.
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
+- [Getting Started](#getting-started)
+- [Customization](#customization)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Overview
 
-This React Single Page Application (SPA) is a collective photo album. It allows users to upload and view photos in a gallery-style layout.
+SharedLens aims to provide a simple and intuitive platform for users to share their favorite photos from events like weddings, birthdays, or other special occasions. With features like image resizing for a seamless upload experience, pagination for efficient navigation, and a responsive design, SharedLens ensures an enjoyable user experience across various devices.
 
 ## Features
 
 - **Image Upload:**
-  Users can upload photos to the gallery. The app supports resizing images before upload for a better user experience.
+  Users can easily upload photos to the gallery, with the app supporting image resizing before upload for a better user experience.
 
 - **Pagination:**
   The gallery is paginated, displaying a fixed number of items per page to enhance performance and navigation.
-
-- **Facebook In-App Browser Detection:**
-  The app detects when it's being viewed in the Facebook in-app browser and provides a message to encourage optimal browser usage.
 
 - **Responsive Design:**
   The app is designed to be responsive, ensuring a consistent user experience across different devices.
@@ -32,87 +29,78 @@ This React Single Page Application (SPA) is a collective photo album. It allows 
 - **Loading States:**
   Various loading indicators and states are implemented to enhance user feedback during image processing and loading.
 
-## Installation
+## Getting Started
 
-To set up the project locally, follow these steps:
+Follow these steps to set up the project locally and configure Firebase for the application:
 
-1. Clone the repository:
+1. Clone the Repository:
+    
+    First, clone the repository and navigate to the project folder:
 
-    ```bash
+    ```
     git clone [repository_url]
     cd [repository_name]
     ```
 
-2. Install dependencies:
+2. Install Dependencies:
 
-    ```bash
+    Install the necessary dependencies for the project:
+
+    ```
     npm install
     ```
 
-3. Run the app locally:
+3. Firebase Configuration:
 
-    ```bash
+    - Create a Firebase project and register a new web app within the project.
+    - Configure Firebase Cloud Storage for the project.
+    - Obtain the Firebase configuration settings for your web app.
+
+    In the project's root directory, create a `.env.local` file, and add the Firebase configuration settings as follows:
+
+    ```
+    REACT_APP_FIREBASE_API_KEY="YOUR_API_KEY"
+    REACT_APP_FIREBASE_AUTH_DOMAIN="YOUR_AUTH_DOMAIN"
+    REACT_APP_FIREBASE_PROJECT_ID="YOUR_PROJECT_ID"
+    REACT_APP_FIREBASE_STORAGE_BUCKET="YOUR_STORAGE_BUCKET"
+    REACT_APP_FIREBASE_MESSAGING_SENDER_ID="YOUR_MESSAGING_SENDER_ID"
+    REACT_APP_FIREBASE_APP_ID="YOUR_APP_ID"
+    ```
+
+4. Run the App Locally:
+
+    Start the app in a local development environment:
+
+    ```
     npm start
     ```
 
-## Usage
+## Customization
 
-1. Access the application at the provided URL or run it locally.
-2. Upload your photos by dragging and dropping or selecting them using the file input.
-3. Browse the gallery and enjoy the photos.
+The application provides various customization options to tailor the experience based on your preferences. You can easily adjust these configurations in the `.env` file.
+
+- `REACT_APP_ITEMS_PER_PAGE`: Number of items to display per page.
+- `REACT_APP_MAX_IMAGE_SIZE`: Maximum width or height for image resizing in pixels.
+- `REACT_APP_BLOB_TYPE`: MIME type for the Blob format (e.g., image/webp, image/jpeg, image/png, etc.).
+- `REACT_APP_BLOB_QUALITY`: Image quality when converting to a Blob (range: 0.0 to 1.0).
+- `REACT_APP_MAX_FILE_SELECTION`: Maximum number of files that can be selected for upload.
+- `REACT_APP_COLUMNS_BREAKPOINT_1`: Column count for screen width up to X pixels.
+- `REACT_APP_COLUMNS_BREAKPOINT_2`: Column count for screen width between X+1 and Y pixels.
+- `REACT_APP_COLUMNS_BREAKPOINT_3`: Column count for screen width greater than Y pixels.
+- `REACT_APP_MASONRY_GUTTER`: Gutter value for the Masonry layout.
+
+Additionally, the styles of the application can be customized through the `index.scss` and `App.scss` files. The codebase adheres to the Block Element Modifier (BEM) methodology, making it straightforward to make style modifications.
 
 ## Contributing
 
-We welcome contributions! Feel free to fork the repository and submit pull requests to contribute to this project.
+I welcome contributions! If you'd like to contribute to this project, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix: git checkout -b feature/your-feature.
+3. Make your modifications and commit them: git commit -m 'Add a new feature'.
+4. Push to the branch: git push origin feature/your-feature.
+5. Open a pull request.
 
 ## License
 
 [Your License Information Here]
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Project To-do List
-
-1. Paginate results
-2. Set maximum number of upload items (client (done) + backend)
-3. Image resizing (client (done) + backend)
-4. File type check (client + backend)
-
-## Deploy to Firebase
-
-`firebase deploy`
