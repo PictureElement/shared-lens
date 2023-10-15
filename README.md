@@ -38,8 +38,8 @@ Follow these steps to set up the project locally and configure Firebase for the 
     First, clone the repository and navigate to the project folder:
 
     ```
-    git clone [repository_url]
-    cd [repository_name]
+    git clone https://github.com/PictureElement/shared-lens.git
+    cd shared-lens
     ```
 
 2. Install Dependencies:
@@ -103,4 +103,4 @@ I welcome contributions! If you'd like to contribute to this project, please fol
 
 ## License
 
-[Your License Information Here]
+&copy; 2023 [Marios Sofokleous](https://www.msof.me/) (PictureElement). Code released under the [MIT](LICENSE.md) license.
