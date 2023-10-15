@@ -1,3 +1,5 @@
+![Banner Image](banner.png)
+
 # SharedLens
 
 SharedLens is a React Single Page Application (SPA) that serves as a collective photo album. It allows users to easily upload and view photos in a visually appealing gallery-style layout.
